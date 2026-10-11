@@ -1,0 +1,40 @@
+---
+import ExperienciaItem from '../components/ExperienciaItem.astro'
+const EXPERIENCIA = [
+    {
+        date: "Enero 2022-Actualidad",
+        description:"He participado en proyectos web realizando tareas de análisis y optimización SEO, trabajando con datos y métricas para entender el rendimiento y la evolución de cada proyecto. He llevado a cabo optimizaciones técnicas orientadas a mejorar el rendimiento y la experiencia de usuario, así como auditorías SEO técnicas y de contenidos. También he elaborado informes de seguimiento de resultados y KPIs, incorporando automatización de tareas y análisis mediante scripts y APIs, y colaborando con otros perfiles técnicos y digitales en el desarrollo y mejora de los proyectos.",
+        title: "Especialista SEO en Campus Training"
+
+    }, 
+    {
+        date: "Septiembre 2020-Enero 2022",
+        description:"Participación en tareas de investigación de palabras clave y análisis de la intención de búsqueda, así como en la maquetación y optimización SEO de contenidos en WordPress, trabajando aspectos como la estructura, el enlazado interno y la usabilidad básica. Apoyo en tareas de posicionamiento orgánico y seguimiento de métricas clave, junto con la creación de informes en Looker Studio y soporte en el análisis SEO. Colaboración y comunicación continua con equipos internos durante el desarrollo de los proyectos.",
+        title: "Especialista SEO en Emérita Legal"
+    }
+    
+
+      
+
+]
+---
+
+<ol class="relative border-s border-violet-500">
+  {EXPERIENCIA.map((experiencia) => (
+    <li class="relative mb-10">
+      <span
+        class="absolute -start-[7px]
+               h-4 w-4 rounded-full
+               bg-violet-800"
+      ></span>
+
+      <div class="ms-8">
+        <ExperienciaItem {...experiencia} />
+      </div>
+    </li>
+  ))}
+</ol>
+
+                  
+
+

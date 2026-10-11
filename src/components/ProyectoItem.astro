@@ -1,0 +1,50 @@
+---
+const columnas = [
+  [
+    {
+      img: "/topical_authority_analycer.jpeg",
+      link: "/seo",
+      alt: "Topical Authority Analyzer",
+    },
+  ],
+];
+---
+
+<section class="galeria">
+  {
+    columnas.map((columna) =>
+      columna.map((proyecto) => (
+        <a href={proyecto.link} target="_blank" rel="noopener noreferrer">
+          <img
+            src={proyecto.img}
+            alt={proyecto.alt}
+            class="proyecto-img"
+          />{" "}
+        </a>
+      )),
+    )
+  }
+</section>
+
+<style>
+  .proyecto-img {
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+    opacity: 0.7;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+  }
+
+  .proyecto-img:hover {
+    transform: scale(1.02);
+  }
+
+  .galeria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-between;
+  }
+</style>

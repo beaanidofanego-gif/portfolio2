@@ -1,0 +1,33 @@
+---
+
+interface Props {
+    columnas:{
+        img: string
+        link: string
+        alt:string
+    }[][]
+}
+
+
+const {columnas}=Astro.props
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
+  {columnas.flat().map((item) => (
+    <a
+      href={item.link}
+      target="_blank"
+      rel="noopener"
+      class="block break-inside-avoid"
+    >
+      <img
+        src={item.img}
+        alt={item.alt}
+        class="w-full rounded-xl mb-4 grayscale hover:grayscale-0 hover:scale-105 transition "
+      />
+    </a>
+  ))}
+</div>
+
+
+

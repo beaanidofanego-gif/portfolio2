@@ -1,0 +1,90 @@
+---
+import "../styles/global.css"
+import Header from "../components/Header.astro";
+import Footer from "src/components/Footer.astro";
+// Supports weights 100-900
+import '@fontsource-variable/onest';
+
+interface Props {
+	title: string
+	description: string
+
+}
+
+	const{description, title}=Astro.props
+---
+
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<div class="fixed inset-0 z-[-10] 
+ 	 	bg-[#e9e9fa]
+  		bg-[radial-gradient(ellipse_90%_60%_at_50%_-15%,rgba(96,125,139,0.4),rgba(255,255,255,0))]">
+		</div>
+
+		<header class="menu z-20">
+			<Header />
+		</header>
+		
+		<main class="max-w-full mx-auto px-4 md:px-8 pt-20 z-0">
+			<slot />
+		</main>
+		<footer class="flex bg-violet-800">
+					<Footer />
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	
+	html{
+		
+	}
+	body {
+		min-height: 100%;
+		font-family: "Onest Variable";
+		line-height: 1.7;
+		
+	}
+	
+	.menu {
+		display: flex;
+		position:sticky;
+		top: 0;
+		justify-content: center;
+		justify-items: center;
+		left: 0;
+		right: 0;
+		
+
+	}
+
+	.proyecto {
+		width: 100%;
+		font-family: "Onest Variable";
+		justify-content: center;
+		marging-right:50;
+		
+
+	}
+
+	
+
+ 
+
+
+
+	
+	
+
+	
+</style>
