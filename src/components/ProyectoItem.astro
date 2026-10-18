@@ -16,14 +16,15 @@ const columnas = [
     columnas.map((columna) =>
       columna.map((proyecto) => (
         <a href={proyecto.link} target="_blank" rel="noopener noreferrer" class="proyecto-item">
+          {proyecto.titulo && (
+            <h2 class="proyecto-titulo">{proyecto.titulo}</h2>
+          )}
           <img
             src={proyecto.img}
             alt={proyecto.alt}
             class="proyecto-img"
           />
-          {proyecto.titulo && (
-            <h2 class="proyecto-titulo">{proyecto.titulo}</h2>
-          )}
+
         </a>
       ))
     )
@@ -56,6 +57,7 @@ const columnas = [
     font-size: 0.95rem;
     margin-top: 0.5rem;
     font-weight: 600;
+    text-align: center;
   }
 
   .galeria {
