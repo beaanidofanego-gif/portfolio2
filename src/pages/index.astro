@@ -4,9 +4,9 @@ import Badge from '../components/Badge.astro';
 import Redes_Sociales from '../components/Redes_Sociales.astro';
 import IconoLinkedin from '../components/iconos/icono_linkedin.astro';
 import IconoMail from '../components/iconos/icono_mail.astro';
-import Experiencia from 'src/components/Experiencia.astro';
+import Experiencia from '../components/Experiencia.astro';
 import Contenedor_seccion from '../components/Contenedor_seccion.astro';
-import ProyectoItem from 'src/components/ProyectoItem.astro';
+import ProyectoItem from '../components/ProyectoItem.astro';
 ---
 
 <Layout 
@@ -34,7 +34,7 @@ import ProyectoItem from 'src/components/ProyectoItem.astro';
 			<h3 class="leading-relaxed text-base md:text-xl opacity-80 text-gray-800 pb-3 text-wrap">  
 				Como especialista SEO, me enfoco en resolver <span class="text-violet-800 font-extrabold">problemas técnicos de rastreo e indexación, estructurar contenidos según la intención de búsqueda del usuario y coordinar estrategias on-page que mejoren la visibilidad.</span> 
 				Cuento con formación especializada en SEO y marketing digital, respaldada por un grado en Sociología y un MBA. Actualmente complemento mi perfil técnico <span class="text-violet-800 font-extrabold">estudiando el Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)</span>
-				y aprendiendo programación para entender mejor la arquitectura web y colaborar de forma directa con equipos de desarrollo.
+				y aprendiendo programación para entender mejor la arquitectura web y colaborar de forma directa con equipos de desarrollo
 			</h3>
 
 			<nav class="flex flex-col md:flex-row gap-x-4 gap-y-3 mt-6 md:mt-8 pb-10 md:pb-20">
@@ -46,16 +46,16 @@ import ProyectoItem from 'src/components/ProyectoItem.astro';
 					<IconoMail class="w-6 h-6" />
 				</Redes_Sociales>
 			</nav>
+		</Contenedor_seccion>
 
-			<Contenedor_seccion class="scroll-mt-24 pb-10">
-				<h2 id="experiencia" class="text-2xl text-violet-800 font-semibold mb-6">Experiencia laboral</h2>
-				<Experiencia />
-			</Contenedor_seccion>
+		<Contenedor_seccion id="experiencia" class="scroll-mt-24 pb-10">
+			<h2 class="text-2xl text-violet-800 font-semibold mb-6">Experiencia laboral</h2>
+			<Experiencia />
+		</Contenedor_seccion>
 
-			<section id="proyecto" class="scroll-mt-24 proyecto"> 
-				<h2 class="text-2xl text-violet-800 font-semibold mb-6">Mis Proyectos</h2>
-				<ProyectoItem/>
-			</section>
+		<Contenedor_seccion id="proyecto" class="scroll-mt-24 pb-10 proyecto"> 
+			<h2 class="text-2xl text-violet-800 font-semibold mb-6">Mis Proyectos</h2>
+			<ProyectoItem />
 		</Contenedor_seccion>
 	</main>
 </Layout>
