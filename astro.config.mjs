@@ -1,12 +1,10 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import node from '@astrojs/node'; // (o @astrojs/vercel si elegiste Vercel)
+import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  adapter: vercel(),
   integrations: [tailwind()],
   vite: {
     optimizeDeps: {
@@ -14,3 +12,4 @@ export default defineConfig({
     },
   },
 });
+
