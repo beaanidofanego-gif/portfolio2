@@ -1,0 +1,140 @@
+---
+/**
+ * Política de Privacidad — Bea Anido
+ * Ruta: /privacidad
+ */
+const MARCA = "Bea Anido";
+const DOMINIO = "www.beaanido.es";
+const EMAIL_CONTACTO = "beaanidofanego@gmail.com"; // Sustituye por tu correo real de contacto
+const URL_PORTFOLIO = "/";
+const URL_HERRAMIENTA = "/seo-fixer";
+const URL_CANONICA = new URL("/privacidad", Astro.site ?? "https://www.beaanido.es").toString();
+const FECHA_ACTUALIZACION = "25 de noviembre de 2026";
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Privacidad — {MARCA}</title>
+<meta name="description" content="Información sobre el tratamiento de datos personales, privacidad y funcionamiento técnico del sitio web y las herramientas de Bea Anido.">
+<link rel="canonical" href={URL_CANONICA}>
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style is:global>
+:root{
+  --fondo:#F5F6FA; --papel:#FFFFFF; --tinta:#161A26; --gris:#596070; --linea:#DADDE6;
+  --indigo:#3A35C9; --indigo-osc:#2B27A3;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:17px/1.65 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--indigo)}
+a:hover{color:var(--indigo-osc)}
+:focus-visible{outline:3px solid var(--indigo);outline-offset:2px}
+.env{max-width:860px;margin:0 auto;padding:0 24px}
+.ico-svg{width:17px;height:17px;flex:0 0 auto;display:inline-block;vertical-align:-3px}
+
+header.barra .env{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:20px;padding-bottom:20px}
+.marca{font-size:14px;color:var(--gris);text-decoration:none;text-align:right}
+.volver{font-size:15px;color:var(--gris);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.volver:hover{color:var(--tinta)}
+
+main{padding:24px 0 80px}
+.doc{background:var(--papel);border:1px solid var(--linea);border-radius:12px;padding:42px 44px}
+.doc-cab{border-bottom:1px solid var(--linea);padding-bottom:24px;margin-bottom:28px}
+.doc-cab h1{font-family:var(--display);font-size:clamp(32px,5vw,48px);line-height:1.05;font-weight:800;margin:0 0 10px;letter-spacing:-.02em}
+.meta-fecha{margin:0;font-size:14.5px;color:var(--gris)}
+
+h2{font-family:var(--display);font-size:22px;line-height:1.25;margin:30px 0 10px;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 14px;color:#2E3445}
+ul{margin:0 0 16px;padding-left:20px;color:#2E3445}
+li{margin-bottom:8px}
+.aviso-datos{background:#FAFBFD;border:1px solid var(--linea);border-radius:8px;padding:16px 20px;margin:16px 0}
+.aviso-datos p{margin:0;font-size:15.5px}
+
+footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;color:var(--gris)}
+.footer-env{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .doc{padding:26px 20px}
+}
+</style>
+</head>
+<body>
+<header class="barra">
+  <div class="env">
+    <a class="volver" href={URL_PORTFOLIO}>
+      <svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.5 10h-11m0 0 4.5-4.5M4.5 10l4.5 4.5"/>
+      </svg>
+      <span>Volver al portfolio</span>
+    </a>
+    <span class="marca"><a href={URL_HERRAMIENTA}>Quick SEO Fixer</a> · {MARCA}</span>
+  </div>
+</header>
+
+<main class="env">
+  <article class="doc">
+    <div class="doc-cab">
+      <h1>Política de Privacidad</h1>
+      <p class="meta-fecha">Última actualización: {FECHA_ACTUALIZACION} · Sitio web: {DOMINIO}</p>
+    </div>
+
+    <p>De conformidad con el Reglamento (UE) 2016/679 General de Protección de Datos (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), se informa a las personas usuarias sobre el tratamiento de datos en <strong>{DOMINIO}</strong>.</p>
+
+    <h2>1. Responsable del tratamiento</h2>
+    <div class="aviso-datos">
+      <p><strong>Titular:</strong> {MARCA}<br>
+      <strong>Sitio web:</strong> https://{DOMINIO}<br>
+      <strong>Correo electrónico de contacto:</strong> <a href={`mailto:${EMAIL_CONTACTO}`}>{EMAIL_CONTACTO}</a></p>
+    </div>
+
+    <h2>2. Datos que se recopilan y finalidad</h2>
+    <p>Este sitio web funciona como portfolio profesional y espacio de demostración de herramientas técnicas (como <strong>Quick SEO Fixer</strong>). El acceso y uso de la web no requiere registro ni creación de cuentas.</p>
+    <ul>
+      <li><strong>Herramienta Quick SEO Fixer (/seo-fixer):</strong> Las URLs introducidas para realizar auditorías técnicas On-Page o análisis de sitemaps se procesan en tiempo real únicamente para extraer las etiquetas HTML públicas y generar el informe en pantalla. No se almacenan en bases de datos propias ni se crean perfiles comerciales con las URLs consultadas.</li>
+      <li><strong>Análisis semántico por embeddings:</strong> El procesamiento semántico se ejecuta directamente en el navegador del usuario mediante Web Workers, sin enviar tus textos a servidores externos de terceros para entrenamiento.</li>
+      <li><strong>Contacto directo:</strong> Si escribes voluntariamente al correo electrónico indicado o a través de los canales profesionales enlazados, tus datos identificativos y el contenido del mensaje se utilizarán exclusivamente para atender tu consulta o propuesta profesional.</li>
+      <li><strong>Registros técnicos del servidor:</strong> El proveedor de alojamiento (Vercel) puede registrar de forma temporal y automatizada datos técnicos imprescindibles para la seguridad, prevención de abusos y entrega de la web (como dirección IP anonimizada o técnica, fecha/hora y código de estado HTTP).</li>
+    </ul>
+
+    <h2>3. Base jurídica del tratamiento</h2>
+    <ul>
+      <li><strong>Ejecución del servicio solicitado (art. 6.1.b RGPD):</strong> Procesar la URL o sitemap introducido por la persona usuaria para mostrar el diagnóstico técnico solicitado.</li>
+      <li><strong>Consentimiento (art. 6.1.a RGPD):</strong> Cuando contactas voluntariamente por correo electrónico o canales externos.</li>
+      <li><strong>Interés legítimo (art. 6.1.f RGPD):</strong> Garantizar la seguridad técnica, estabilidad y protección frente a usos abusivos de la infraestructura web.</li>
+    </ul>
+
+    <h2>4. Encargados del tratamiento y servicios de terceros</h2>
+    <p>Para el funcionamiento técnico de la web se utilizan los siguientes proveedores:</p>
+    <ul>
+      <li><strong>Vercel Inc.:</strong> Infraestructura de alojamiento web y ejecución de funciones serverless bajo cláusulas contractuales tipo y marcos de adecuación vigentes.</li>
+      <li><strong>Google Fonts:</strong> Carga de tipografías web para la correcta visualización de la interfaz.</li>
+      <li><strong>PayPal (opcional):</strong> Si decides realizar una aportación voluntaria a través del enlace de apoyo («Invítame a un café»), la transacción se gestiona íntegramente en la plataforma externa de PayPal bajo su propia política de privacidad, sin que este sitio acceda a tus datos bancarios o de tarjeta.</li>
+    </ul>
+
+    <h2>5. Cookies y almacenamiento local</h2>
+    <p>Este sitio web <strong>no utiliza cookies publicitarias ni de seguimiento comercial</strong>. Únicamente pueden emplearse recursos técnicos esenciales del navegador (como caché local para el modelo de análisis semántico en el navegador) necesarios para el funcionamiento de las utilidades ofrecidas.</p>
+
+    <h2>6. Conservación de los datos</h2>
+    <p>Las consultas realizadas en Quick SEO Fixer no se conservan una vez finalizada la petición. Los correos electrónicos recibidos se conservarán únicamente durante el tiempo necesario para gestionar la comunicación profesional y cumplir con las obligaciones legales aplicables.</p>
+
+    <h2>7. Derechos de las personas usuarias</h2>
+    <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad enviando una solicitud a <a href={`mailto:${EMAIL_CONTACTO}`}>{EMAIL_CONTACTO}</a>. Asimismo, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">www.aepd.es</a>) si consideras que el tratamiento no se ajusta a la normativa vigente.</p>
+  </article>
+</main>
+
+<footer>
+  <div class="env footer-env">
+    <span>{MARCA} · {DOMINIO}</span>
+    <div>
+      <a href={URL_PORTFOLIO}>Portfolio</a> · <a href={URL_HERRAMIENTA}>Quick SEO Fixer</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
