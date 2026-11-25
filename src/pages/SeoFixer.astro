@@ -1,0 +1,1387 @@
+---
+/**
+ * Quick SEO Fixer — Auditoría On-Page, Parches Schema y Análisis Semántico en el navegador.
+ * Ruta: /herramientas/seo-fixer
+ */
+const MARCA = "Bea Anido";
+const URL_PORTFOLIO = "/";
+const URL_PRIVACIDAD = "/privacidad";
+const URL_CAFE = "https://paypal.me/beaanido";
+const TEXTO_CAFE = "Invítame a un café";
+const URL_CANONICA = new URL("/herramientas/seo-fixer", Astro.site ?? "https://www.beaanido.es").toString();
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick SEO Fixer: Auditoría On-Page y generador de parches HTML y Schema JSON-LD</title>
+<meta name="description" content="Herramienta gratuita: audita etiquetas críticas (title, meta description, H1, canonical, alt) y genera parches HTML y Schema JSON-LD listos para copiar.">
+<link rel="canonical" href={URL_CANONICA}>
+<meta property="og:title" content="Quick SEO Fixer — Auditoría On-Page y Parches">
+<meta property="og:description" content="Detecta fallos SEO críticos en segundos y genera código listo para producción.">
+<meta property="og:type" content="website">
+<meta property="og:url" content={URL_CANONICA}>
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Quick SEO Fixer",
+  url: URL_CANONICA,
+  applicationCategory: "SEO",
+  operatingSystem: "Web",
+  inLanguage: "es",
+  isAccessibleForFree: true,
+  creator: { "@type": "Person", name: MARCA, url: new URL("/", URL_CANONICA).toString() },
+  description: "Audita etiquetas críticas On-Page, genera parches HTML y Schema JSON-LD y analiza clústeres temáticos con embeddings.",
+})} />
+<style is:global>
+:root{
+  --fondo:#F5F6FA; --papel:#FFFFFF; --tinta:#161A26; --gris:#596070; --linea:#DADDE6;
+  --indigo:#3A35C9; --indigo-osc:#2B27A3;
+  --ok:#1C7A4C; --parcial:#A86A0C; --mal:#B3302A; --neutro:#6B7280;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:17px/1.6 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--indigo)}
+:focus-visible{outline:3px solid var(--indigo);outline-offset:2px}
+.env{max-width:980px;margin:0 auto;padding:0 24px}
+.oculto{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.015em}
+
+header.barra .env{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:20px;padding-bottom:20px}
+.marca{font-size:14px;color:var(--gris);text-decoration:none;text-align:right}
+.volver{font-size:15px;color:var(--gris);text-decoration:none}
+.volver:hover{color:var(--tinta)}
+
+/* Portada */
+.portada{padding:48px 0 80px}
+.portada h1{font-size:clamp(42px,7.2vw,84px);line-height:.98;font-weight:800;font-stretch:88%;margin:0 0 22px;max-width:14ch}
+.entradilla{font-size:20px;color:#2E3445;max-width:54ch;margin:0 0 34px}
+form.comprobar{display:flex;gap:10px;max-width:660px}
+form.comprobar input{flex:1;min-width:0;font:inherit;font-size:19px;padding:14px 16px;border:2px solid var(--tinta);border-radius:8px;background:#fff;color:var(--tinta)}
+form.comprobar input:focus{outline:none;box-shadow:0 0 0 4px rgba(58,53,201,.25)}
+.boton{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:8px;background:var(--indigo);color:#fff;padding:14px 22px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
+.boton:hover{background:var(--indigo-osc)}
+.boton:disabled{opacity:.65;cursor:progress}
+.boton.linea{background:transparent;color:var(--tinta);border:2px solid var(--tinta);padding:12px 18px}
+.boton.linea:hover{background:var(--tinta);color:#fff}
+.nota{font-size:15px;color:var(--gris);margin:12px 0 0}
+.error{color:var(--mal);font-weight:600;margin:14px 0 0;max-width:62ch}
+
+/* Código escribiéndose en portada */
+.ejemplo-portada{margin:64px 0 0;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:start}
+.terminal-vivo{
+  background:var(--tinta);
+  color:#E7E9F2;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 16px 36px rgba(22,26,38,.12);
+}
+.terminal-cab{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:11px 16px;
+  background:rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font:12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:#9CA3B8;
+}
+.terminal-punto{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:rgba(231,233,242,.25);
+}
+.terminal-cab span:last-child{margin-left:auto}
+.terminal-vivo pre{
+  margin:0;
+  padding:20px 22px;
+  min-height:196px;
+  font:13.5px/1.68 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.cursor-vivo{
+  display:inline-block;
+  width:8px;
+  height:1.1em;
+  vertical-align:-2px;
+  background:#8FE0B4;
+  margin-left:2px;
+  animation:parpadeo .85s steps(1) infinite;
+}
+@keyframes parpadeo{50%{opacity:0}}
+.ejemplo-portada h2{font-size:28px;line-height:1.12;margin:0 0 12px;font-weight:700}
+.ejemplo-portada p{margin:0 0 12px;color:#2E3445}
+
+/* Cargando */
+.cargando{padding:72px 0 120px;max-width:640px}
+.cargando h2{font-size:40px;line-height:1.05;margin:0 0 10px}
+.lista-carga{list-style:none;margin:28px 0 0;padding:0}
+.lista-carga li{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--linea);color:var(--gris)}
+.lista-carga li.activo{color:var(--tinta);font-weight:600}
+.puntos::after{content:"";animation:puntos 1.2s steps(4) infinite}
+@keyframes puntos{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+
+/* Resultado */
+.resultado{padding:8px 0 80px}
+.ficha{background:var(--papel);border:1px solid var(--linea);border-radius:12px;overflow:hidden}
+.ficha-cab{padding:22px 32px;border-bottom:1px solid var(--linea);display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;font-size:15px;color:var(--gris)}
+.ficha-cab strong{color:var(--tinta);font-size:17px;word-break:break-all}
+.veredicto{padding:34px 32px 10px;display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
+#veredicto:focus{outline:none}
+.veredicto .n{font-family:var(--display);font-weight:800;font-stretch:80%;font-size:clamp(84px,14vw,148px);line-height:.85;letter-spacing:-.03em}
+.veredicto .n span{color:var(--linea)}
+.veredicto h2{font-size:28px;line-height:1.15;margin:0;font-weight:700;max-width:22ch}
+.veredicto-nota{padding:6px 32px 24px;margin:0;color:#2E3445;max-width:72ch}
+
+.bloque{padding:28px 32px;border-top:1px solid var(--linea)}
+.bloque h3{font-size:24px;margin:0 0 4px;font-weight:700}
+.bloque > p{margin:0 0 16px;color:var(--gris);font-size:15px;max-width:70ch}
+
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:grid;grid-template-columns:28px minmax(0,260px) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid #EEF0F4;font-size:15.5px}
+.checks li:last-child{border-bottom:0}
+.checks .ico{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;margin-top:2px}
+.ico.ok{background:var(--ok)} .ico.problema{background:var(--mal)} .ico.aviso{background:var(--parcial)}
+.checks strong{font-weight:600}
+.checks span.t{color:#2E3445;word-break:break-word}
+
+/* Parches y bloques de código */
+.parche-item{margin-bottom:24px}
+.parche-item:last-child{margin-bottom:0}
+.parche-item h4{font-family:var(--display);font-size:19px;margin:0 0 6px}
+.codigo{position:relative}
+.codigo pre{background:var(--tinta);color:#E7E9F2;border-radius:8px;padding:16px 18px;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-x:auto;margin:8px 0 0;white-space:pre-wrap}
+.codigo button{position:absolute;top:8px;right:8px;font:inherit;font-size:13px;font-weight:600;background:#fff;color:var(--tinta);border:0;border-radius:4px;padding:4px 10px;cursor:pointer}
+.codigo button:hover{background:#E7E9F2}
+
+.sub-detalle{margin-top:18px;padding-top:16px;border-top:1px dashed var(--linea)}
+.sub-detalle h4{font-family:var(--display);font-size:18px;margin:0 0 8px}
+
+.cluster-box{margin-top:22px;padding-top:18px;border-top:1px dashed var(--linea)}
+.cluster-box textarea{width:100%;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:10px 12px;border:1px solid var(--linea);border-radius:8px;background:#fff;color:var(--tinta)}
+.cluster-grid-opts{display:flex;gap:12px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.cluster-card{padding:14px 16px;border:1px solid var(--linea);border-radius:8px;margin-bottom:12px;background:#FAFBFD}
+.cluster-alerta{padding:12px 14px;border:1px solid #F1C27D;background:#FFF9EE;border-radius:8px;margin-bottom:12px;font-size:14.5px}
+
+/* Barra de progreso */
+.barra-progreso{width:100%;height:10px;background:#E2E5EE;border-radius:999px;overflow:hidden;margin-top:8px}
+.barra-progreso > span{display:block;height:100%;width:0%;background:var(--indigo);border-radius:999px;transition:width .25s ease}
+.estado-ia{margin-top:16px;padding:12px 16px;background:#fff;border-radius:8px;border:1px solid var(--linea);font-size:15px;font-weight:600;color:var(--indigo)}
+
+.acciones{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:28px 0 0}
+.compartir{margin-left:auto;display:flex;flex-wrap:wrap;gap:16px;font-size:15px}
+footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;color:var(--gris)}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .portada{padding:20px 0 56px}
+  form.comprobar{flex-direction:column}
+  .ejemplo-portada{grid-template-columns:1fr;gap:24px;margin-top:48px}
+  .ficha-cab,.veredicto,.bloque{padding-left:20px;padding-right:20px}
+  .veredicto-nota{padding-left:20px;padding-right:20px}
+  .checks li{grid-template-columns:28px minmax(0,1fr)}
+  .checks span.t{grid-column:2}
+  .compartir{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .cursor-vivo{opacity:0}
+}
+</style>
+</head>
+<body>
+<header class="barra">
+  <div class="env">
+    <a class="volver" href={URL_PORTFOLIO}>← Volver al portfolio</a>
+    <span class="marca">Una herramienta de <a href={URL_PORTFOLIO}>{MARCA}</a></span>
+  </div>
+</header>
+
+<main class="env">
+  <section class="portada" id="vista-inicio">
+    <h1>Audita tu SEO On-Page</h1>
+    <p class="entradilla">Comprueba en segundos si las etiquetas de tu HTML están bien configuradas.</p>
+    <form class="comprobar" id="form-comprobar" novalidate>
+      <label class="sr" for="url">Dirección de la página</label>
+      <input id="url" type="text" inputmode="url" autocomplete="url" placeholder="https://tudominio.com/pagina" required>
+      <button class="boton" type="submit">Auditar URL</button>
+    </form>
+    <p class="error oculto" id="error" role="alert"></p>
+    <p class="nota">Gratis, sin registro y con análisis semántico.</p>
+
+    <div class="ejemplo-portada">
+      <div class="terminal-vivo" aria-hidden="true">
+        <div class="terminal-cab">
+          <i class="terminal-punto"></i>
+          <i class="terminal-punto"></i>
+          <i class="terminal-punto"></i>
+          <span>patch.html</span>
+        </div>
+        <pre><span id="codigo-vivo"></span><span class="cursor-vivo"></span></pre>
+      </div>
+      <div>
+        <h2>Del diagnóstico técnico al código listo para producción</h2>
+        <p>Detectar que falta una meta descripción o un H1 es solo la mitad del trabajo. Lo que frena la ejecución es tener resuelto el diagnóstico técnico, los bloques listos para pegar y la visión de conjunto del contenido.</p>
+        <p>Analizamos el HTML real de tu URL, verificamos las reglas críticas On-Page junto con señales extendidas y media, generamos los parches HTML y Schema JSON-LD listos para copiar y te permitimos analizar el enfoque temático y agrupar contenidos en clústeres desde el navegador.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cargando oculto" id="vista-cargando" aria-live="polite">
+    <h2>Auditando <span id="cargando-dominio"></span></h2>
+    <p class="nota">Analizando el HTML en tiempo real...</p>
+    <ul class="lista-carga">
+      <li>Descargando código fuente HTML</li>
+      <li>Verificando Title, Meta Description, Canonical, H1 e imágenes</li>
+      <li>Construyendo parches HTML y Schema JSON-LD</li>
+    </ul>
+  </section>
+
+  <section class="resultado oculto" id="vista-resultado"></section>
+</main>
+
+<footer>
+  <div class="env">{MARCA}. Auditoría técnica On-Page gratuita. <a href={URL_PRIVACIDAD}>Política de privacidad</a>
+    {URL_CAFE && <> · <a href={URL_CAFE} target="_blank" rel="noopener">☕ {TEXTO_CAFE}</a></>}
+  </div>
+</footer>
+
+<script>
+  // @ts-nocheck
+  import SeoSemanticWorker from '../workers/seo-semantic.worker.ts?worker';
+
+  const MAX_PAGES = 120;
+  const semanticWorker = new SeoSemanticWorker();
+  const $ = (s) => document.querySelector(s);
+  const mapaHtml = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  const esc = (t) =>
+    String(t ?? '').replace(/[&<>"']/g, (c) => mapaHtml[c] || c);
+
+  let RES = null;
+  let snippetsCopiables = [];
+  let semTimeout = null;
+  let temporizador = null;
+  let timerCodigoVivo = null;
+
+  const MUESTRA_CODIGO_VIVO = `<title>SEO Técnico y Producto | Mi Web</title>
+<meta name="description" content="Auditoría HTML, parches listos y clústeres.">
+<script type="application/ld+json">
+{ "@type": "WebPage", "inLanguage": "es" }
+</scr` + `ipt>`;
+
+  function iniciarCodigoVivo() {
+    const el = $('#codigo-vivo');
+    if (!el) return;
+    clearTimeout(timerCodigoVivo);
+
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      el.textContent = MUESTRA_CODIGO_VIVO;
+      return;
+    }
+
+    let idx = 0;
+    el.textContent = '';
+
+    const tick = () => {
+      if ($('#vista-inicio')?.classList.contains('oculto')) {
+        timerCodigoVivo = setTimeout(tick, 500);
+        return;
+      }
+      if (idx <= MUESTRA_CODIGO_VIVO.length) {
+        el.textContent = MUESTRA_CODIGO_VIVO.slice(0, idx);
+        idx += 1;
+        const ch = MUESTRA_CODIGO_VIVO[idx - 1];
+        const pausa = ch === '\n' ? 95 : 22;
+        timerCodigoVivo = setTimeout(tick, pausa);
+      } else {
+        timerCodigoVivo = setTimeout(() => {
+          idx = 0;
+          el.textContent = '';
+          timerCodigoVivo = setTimeout(tick, 300);
+        }, 2600);
+      }
+    };
+
+    tick();
+  }
+
+  iniciarCodigoVivo();
+
+  function limpiarTimers() {
+    clearInterval(temporizador);
+    clearTimeout(semTimeout);
+    temporizador = null;
+    semTimeout = null;
+  }
+
+  function recortarTexto(txt, max = 250) {
+    const s = String(txt ?? '').trim();
+    if (s.length <= max) return s;
+    return s.slice(0, max - 3).trimEnd() + '...';
+  }
+
+  async function copiarTexto(texto, btn) {
+    try {
+      await navigator.clipboard.writeText(texto);
+      const original = btn.dataset.originalLabel || btn.textContent || 'Copiar';
+      btn.dataset.originalLabel = original;
+      btn.textContent = 'Copiado';
+      setTimeout(() => {
+        if (btn.isConnected) btn.textContent = original;
+      }, 2000);
+    } catch {
+      btn.textContent = 'Error';
+      setTimeout(() => {
+        if (btn.isConnected) btn.textContent = 'Copiar';
+      }, 2000);
+    }
+  }
+
+  function ponerProgresoSem(texto, pct) {
+    const wrapSem = $('#semantica-progreso-wrap');
+    const estadoSem = $('#semantica-estado');
+    const barraSem = $('#semantica-barra');
+    if (wrapSem) wrapSem.classList.remove('oculto');
+    if (estadoSem) estadoSem.textContent = texto;
+    if (typeof pct === 'number' && barraSem) {
+      barraSem.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+    }
+  }
+
+  function liberarBotonSem(mensajeError) {
+    clearTimeout(semTimeout);
+    semTimeout = null;
+    const btnSem = $('#btn-semantica');
+    const btnCluster = $('#btn-cluster-blog');
+    if (btnSem) btnSem.disabled = false;
+    if (btnCluster) btnCluster.disabled = false;
+    if (mensajeError) {
+      ponerProgresoSem(`Aviso: ${mensajeError}`, 0);
+      const estadoCluster = $('#cluster-estado');
+      if (estadoCluster) estadoCluster.textContent = `Aviso: ${mensajeError}`;
+    }
+  }
+
+  function renderClusterResult(result) {
+    const btnCluster = $('#btn-cluster-blog');
+    const estadoCluster = $('#cluster-estado');
+    const salidaCluster = $('#cluster-resultado');
+    if (btnCluster) btnCluster.disabled = false;
+
+    if (estadoCluster) {
+      estadoCluster.textContent = `${result.clustersCount} clústeres · ${result.standaloneCount} artículos sueltos · ${result.cannibalizationCount} posibles solapamientos`;
+    }
+
+    if (!salidaCluster) return;
+
+    const alertasHtml = Array.isArray(result.cannibalizations) && result.cannibalizations.length > 0
+      ? `<div class="cluster-alerta">
+          <strong>Posible solapamiento o canibalización (${result.cannibalizations.length}):</strong>
+          <ul style="margin:8px 0 0;padding-left:18px">
+            ${result.cannibalizations
+              .map(
+                (c) => `
+                  <li style="margin-bottom:8px">
+                    <strong>${esc(c.postA?.title || c.postA?.url)}</strong> ↔ <strong>${esc(c.postB?.title || c.postB?.url)}</strong>
+                    <div class="nota" style="margin:2px 0 0">${esc(c.reason || 'Ambos contenidos presentan un enfoque temático muy cercano.')}</div>
+                  </li>`
+              )
+              .join('')}
+          </ul>
+        </div>`
+      : '';
+
+    const clustersHtml = Array.isArray(result.clusters) && result.clusters.length > 0
+      ? result.clusters
+          .map(
+            (cl) => `
+              <div class="cluster-card">
+                <strong>Clúster: ${esc(cl.label)}</strong> <span class="nota">(${cl.size} contenidos)</span>
+                <div class="nota" style="margin:4px 0 10px">Artículo pilar sugerido: <strong>${esc(cl.pillar?.title || cl.pillar?.url || '')}</strong></div>
+                <ul style="margin:0;padding-left:18px;font-size:14.5px">
+                  ${(cl.posts || [])
+                    .map(
+                      (p) => `
+                        <li style="margin-bottom:8px">
+                          ${p.isPillar ? '<strong>[Pilar]</strong> ' : ''}
+                          <strong>${esc(p.title)}</strong> — <span style="color:var(--gris)">${esc(p.url)}</span>
+                          <div class="nota" style="margin:2px 0 0">
+                            ${esc(p.reason || (p.isPillar ? 'Artículo central seleccionado por su mayor afinidad con el resto del grupo.' : 'Agrupado por afinidad temática y de intención con el pilar.'))}
+                          </div>
+                        </li>`
+                    )
+                    .join('')}
+                </ul>
+              </div>`
+          )
+          .join('')
+      : `<p class="nota">No se formaron grupos con el umbral actual. Prueba a ajustar el nivel de exigencia.</p>`;
+
+    const sueltosHtml = Array.isArray(result.standalonePosts) && result.standalonePosts.length > 0
+      ? `<div class="nota" style="margin-top:10px">
+          <strong>Artículos con enfoque propio (${result.standalonePosts.length}):</strong>
+          ${result.standalonePosts.map((s) => esc(s.title || s.h1 || s.url)).join(' · ')}
+        </div>`
+      : '';
+
+    salidaCluster.innerHTML = alertasHtml + clustersHtml + sueltosHtml;
+  }
+
+  semanticWorker.onerror = (err) => {
+    liberarBotonSem(err?.message || 'Error interno en el worker de semántica.');
+  };
+
+  semanticWorker.onmessage = (event) => {
+    const { status, message, percent, result } = event.data || {};
+    const resSem = $('#semantica-resultado');
+    const wrapSem = $('#semantica-progreso-wrap');
+    const btnSem = $('#btn-semantica');
+    const estadoCluster = $('#cluster-estado');
+
+    if (status === 'loading') {
+      ponerProgresoSem(message || 'Cargando modelo semántico...', 15);
+      if (estadoCluster && $('#btn-cluster-blog')?.disabled) {
+        estadoCluster.textContent = message || 'Cargando modelo semántico...';
+      }
+    } else if (status === 'progress') {
+      const escalado = 15 + Math.round((Number(percent || 0) * 65) / 100);
+      ponerProgresoSem(`Descargando/procesando modelo semántico: ${percent || 0}%`, escalado);
+    } else if (status === 'computing') {
+      ponerProgresoSem(message || 'Calculando coherencia temática...', 88);
+      if (estadoCluster) estadoCluster.textContent = message || 'Calculando clústeres...';
+    } else if (status === 'complete' && result && Array.isArray(result.clusters)) {
+      clearTimeout(semTimeout);
+      semTimeout = null;
+      ponerProgresoSem('Clustering completado', 100);
+      setTimeout(() => wrapSem?.classList.add('oculto'), 250);
+      renderClusterResult(result);
+    } else if (status === 'complete' && result) {
+      clearTimeout(semTimeout);
+      semTimeout = null;
+      ponerProgresoSem('Completado', 100);
+      setTimeout(() => wrapSem?.classList.add('oculto'), 250);
+
+      const pct = (v) => (typeof v === 'number' ? `${Math.round(v * 100)}%` : 'N/D');
+      const termsText = Array.isArray(result.topTerms) && result.topTerms.length
+        ? result.topTerms.join(', ')
+        : 'No detectados';
+      const verdict = result.verdict || { label: 'Sin valoración', level: 'ok' };
+      const scorePct = typeof result.finalScore === 'number' ? `${Math.round(result.finalScore * 100)}%` : 'N/D';
+
+      if (resSem) {
+        resSem.innerHTML = `
+          <p style="margin:0 0 12px;color:#2E3445;font-size:15.5px"><strong>Diagnóstico:</strong> ${esc(result.diagnosis || 'Sin diagnóstico disponible.')}</p>
+          <ul class="checks">
+            <li>
+              <span class="ico ${verdict.level === 'mal' ? 'problema' : 'ok'}" aria-hidden="true">${verdict.level === 'mal' ? '✕' : '✓'}</span>
+              <strong>Valoración general</strong>
+              <span class="t">${esc(verdict.label)} (${scorePct})</span>
+            </li>
+            <li>
+              <span class="ico ok" aria-hidden="true">i</span>
+              <strong>Tema detectado</strong>
+              <span class="t">${esc(result.inferredTopic || 'No determinado')}</span>
+            </li>
+            <li>
+              <span class="ico ok" aria-hidden="true">i</span>
+              <strong>Términos recurrentes</strong>
+              <span class="t">${esc(termsText)} (${Number(result.wordCount || 0)} palabras analizadas)</span>
+            </li>
+            <li>
+              <span class="ico ok" aria-hidden="true">i</span>
+              <strong>Coherencia Title ↔ H1</strong>
+              <span class="t">${pct(result.titleH1Sim)}</span>
+            </li>
+            <li>
+              <span class="ico ok" aria-hidden="true">i</span>
+              <strong>Desarrollo del tema en cuerpo</strong>
+              <span class="t">${pct(result.topicBodySim)}</span>
+            </li>
+          </ul>
+        `;
+        resSem.classList.remove('oculto');
+      }
+      if (btnSem) btnSem.disabled = false;
+    } else if (status === 'error') {
+      liberarBotonSem(message || 'No se pudo completar el análisis semántico.');
+    }
+  };
+
+  async function extraerUrlsDeSitemap(sitemapUrl, pathFilter = '', limit = MAX_PAGES) {
+    const safeLimit = Math.min(Math.max(Number(limit) || MAX_PAGES, 2), MAX_PAGES);
+    const params = new URLSearchParams({
+      url: sitemapUrl,
+      filter: pathFilter,
+      limit: String(safeLimit),
+    });
+    const resp = await fetch('/api/sitemap?' + params.toString());
+    const data = await resp.json();
+    if (!resp.ok) {
+      throw new Error(data?.error || `No se pudo leer el sitemap (${resp.status}).`);
+    }
+    return Array.isArray(data?.urls) ? data.urls.slice(0, MAX_PAGES) : [];
+  }
+
+  async function obtenerUrlsDesdeEntrada(textoEntrada, pathFilter = '', limit = MAX_PAGES) {
+    const safeLimit = Math.min(Math.max(Number(limit) || MAX_PAGES, 2), MAX_PAGES);
+    const lineas = String(textoEntrada || '')
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((u) => (/^https?:\/\//i.test(u) ? u : `https://${u}`));
+
+    if (lineas.length === 1) {
+      return await extraerUrlsDeSitemap(lineas[0], pathFilter, safeLimit);
+    }
+
+    const filtradas = pathFilter
+      ? lineas.filter((u) => u.toLowerCase().includes(pathFilter.toLowerCase()))
+      : lineas;
+
+    return filtradas.slice(0, safeLimit);
+  }
+
+  function extractAttr(tag, attr) {
+    const re = new RegExp(`\\b${attr}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i');
+    const m = String(tag || '').match(re);
+    return m ? (m[1] ?? m[2] ?? m[3] ?? '').trim() : null;
+  }
+
+  function hasAttr(tag, attr) {
+    return new RegExp(`\\b${attr}(?=\\s|/?>|=)`, 'i').test(String(tag || ''));
+  }
+
+  function buildMediaAuditFromHtml(html) {
+    const raw = String(html || '');
+    if (!raw.trim()) return null;
+
+    const imgTags = raw.match(/<img\b[^>]*>/gi) ?? [];
+    const iframeTags = raw.match(/<iframe\b[^>]*>/gi) ?? [];
+    const videoTags = raw.match(/<video\b[^>]*>/gi) ?? [];
+    const pictureTags = raw.match(/<picture\b[^>]*>[\s\S]*?<\/picture>/gi) ?? [];
+
+    let lazyImagesCount = 0;
+    let nonLazyImagesCount = 0;
+    let eagerImagesCount = 0;
+    let dataSrcImagesCount = 0;
+    let highPriorityImagesCount = 0;
+    let missingDimensionsCount = 0;
+    let missingAltAttrCount = 0;
+    let emptyAltCount = 0;
+    let responsiveSrcsetCount = 0;
+
+    const parsedImgs = imgTags.map((tag, index) => {
+      const src = extractAttr(tag, 'src') || '';
+      const dataSrc = extractAttr(tag, 'data-src') || extractAttr(tag, 'data-lazy-src') || '';
+      const effectiveSrc = src || dataSrc || '(sin src)';
+      const altAttrPresent = hasAttr(tag, 'alt');
+      const alt = extractAttr(tag, 'alt') ?? '';
+      const loading = (extractAttr(tag, 'loading') || '').toLowerCase();
+      const decoding = (extractAttr(tag, 'decoding') || '').toLowerCase();
+      const fetchPriority = (extractAttr(tag, 'fetchpriority') || '').toLowerCase();
+      const srcset = extractAttr(tag, 'srcset') || '';
+      const style = extractAttr(tag, 'style') || '';
+      const width = Number(extractAttr(tag, 'width') || 0);
+      const height = Number(extractAttr(tag, 'height') || 0);
+      const classOrId = `${extractAttr(tag, 'class') || ''} ${extractAttr(tag, 'id') || ''}`.toLowerCase();
+      const isLazy = loading === 'lazy';
+
+      if (isLazy) lazyImagesCount++;
+      else nonLazyImagesCount++;
+
+      if (loading === 'eager') eagerImagesCount++;
+      if (!src && dataSrc) dataSrcImagesCount++;
+      if (fetchPriority === 'high') highPriorityImagesCount++;
+      if (srcset) responsiveSrcsetCount++;
+
+      if (!width && !height && !/\b(width|height)\s*:/i.test(style)) {
+        missingDimensionsCount++;
+      }
+
+      if (!altAttrPresent) {
+        missingAltAttrCount++;
+      } else if (!alt.trim()) {
+        emptyAltCount++;
+      }
+
+      const looksLikeHero =
+        /hero|banner|jumbotron|cover|featured|masthead/i.test(classOrId) ||
+        /hero|banner|cover/i.test(effectiveSrc) ||
+        width >= 600 ||
+        height >= 350;
+
+      return {
+        index,
+        effectiveSrc,
+        loading,
+        decoding,
+        fetchPriority,
+        width,
+        height,
+        isLazy,
+        looksLikeHero,
+      };
+    });
+
+    const heroImg = parsedImgs.find((im) => im.looksLikeHero) ?? parsedImgs[0] ?? null;
+
+    let heroHasLazy = false;
+    let heroSummary = 'No se detectó ninguna imagen candidata a hero en el HTML.';
+
+    if (heroImg) {
+      heroHasLazy = heroImg.isLazy;
+      const dimsText =
+        heroImg.width || heroImg.height
+          ? `${heroImg.width || '?'}x${heroImg.height || '?'}`
+          : 'sin width/height explícitos';
+      const shortSrc =
+        heroImg.effectiveSrc.length > 65
+          ? `${heroImg.effectiveSrc.slice(0, 62)}...`
+          : heroImg.effectiveSrc;
+
+      const hints = [dimsText];
+      if (heroImg.fetchPriority) hints.push(`fetchpriority="${heroImg.fetchPriority}"`);
+      if (heroImg.decoding) hints.push(`decoding="${heroImg.decoding}"`);
+
+      heroSummary = heroImg.isLazy
+        ? `Posible hero con loading="lazy" (${shortSrc} · ${hints.join(' · ')}). Evita lazy en imágenes above-the-fold para no penalizar el LCP.`
+        : `Sin loading="lazy" (${shortSrc} · ${hints.join(' · ')}).`;
+    }
+
+    let lazyIframesCount = 0;
+    for (const tag of iframeTags) {
+      if ((extractAttr(tag, 'loading') || '').toLowerCase() === 'lazy') {
+        lazyIframesCount++;
+      }
+    }
+
+    let videosWithPoster = 0;
+    let videosPreloadNone = 0;
+    for (const tag of videoTags) {
+      if (hasAttr(tag, 'poster')) videosWithPoster++;
+      if ((extractAttr(tag, 'preload') || '').toLowerCase() === 'none') videosPreloadNone++;
+    }
+
+    return {
+      totalImages: imgTags.length,
+      lazyImagesCount,
+      nonLazyImagesCount,
+      eagerImagesCount,
+      dataSrcImagesCount,
+      highPriorityImagesCount,
+      missingDimensionsCount,
+      missingAltAttrCount,
+      emptyAltCount,
+      responsiveSrcsetCount,
+      picturesCount: pictureTags.length,
+      iframesCount: iframeTags.length,
+      lazyIframesCount,
+      videosCount: videoTags.length,
+      videosWithPoster,
+      videosPreloadNone,
+      heroHasLazy,
+      heroSummary,
+    };
+  }
+
+  function buildExtendedAuditFallback(data, targetUrl) {
+    const rawHtml = String(data?.html || '');
+    const media = data?.mediaAudit || buildMediaAuditFromHtml(rawHtml);
+    let parsedHost = '';
+    try {
+      parsedHost = new URL(data?.url || targetUrl || '').hostname;
+    } catch {
+      parsedHost = '';
+    }
+
+    const h2Matches = [...rawHtml.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)].map((m) =>
+      m[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+    ).filter(Boolean);
+
+    const divSpanTitles = [...rawHtml.matchAll(/<(?:div|span)\b([^>]*)>([\s\S]*?)<\/(?:div|span)>/gi)]
+      .filter((m) => /\b(title|heading|headline|hero-title|post-title)\b/i.test(m[1] || ''))
+      .map((m) => m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())
+      .filter((t) => t.length > 2 && t.length < 140)
+      .slice(0, 5);
+
+    const jsonLdBlocks = [...rawHtml.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
+    const tiposSchema = [];
+    const formatosSchema = jsonLdBlocks.length > 0 ? ['JSON-LD'] : [];
+    const schemaInvalidos = [];
+    let primerJsonLdMalo = '';
+
+    for (const m of jsonLdBlocks) {
+      const content = (m[1] || '').trim();
+      try {
+        const parsed = JSON.parse(content);
+        const items = Array.isArray(parsed) ? parsed : [parsed];
+        for (const item of items) {
+          if (item && typeof item === 'object') {
+            if (item['@type']) tiposSchema.push(String(item['@type']));
+            if (Array.isArray(item['@graph'])) {
+              for (const g of item['@graph']) {
+                if (g && g['@type']) tiposSchema.push(String(g['@type']));
+              }
+            }
+          }
+        }
+      } catch (err) {
+        schemaInvalidos.push(err?.message || 'JSON-LD inválido');
+        if (!primerJsonLdMalo) primerJsonLdMalo = recortarTexto(content, 250);
+      }
+    }
+
+    const anchorMatches = [...rawHtml.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
+    let internos = 0;
+    const anchors = [];
+    for (const m of anchorMatches) {
+      const href = extractAttr(`<a ${m[1] || ''}>`, 'href') || '';
+      const textoAnchor = m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      const esInterno =
+        href.startsWith('/') ||
+        (!/^https?:\/\//i.test(href) && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) ||
+        (parsedHost && href.toLowerCase().includes(parsedHost.toLowerCase()));
+      if (esInterno && href && !href.startsWith('#')) internos++;
+      if (textoAnchor || href) {
+        anchors.push({ text: recortarTexto(textoAnchor || '(sin texto)', 70), href: recortarTexto(href, 90) });
+      }
+    }
+
+    const bodySinTags = rawHtml
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const palabras = bodySinTags ? bodySinTags.split(/\s+/).length : 0;
+
+    const metaRobots = extractAttr(rawHtml.match(/<meta\b[^>]*name=["']robots["'][^>]*>/i)?.[0] || '', 'content') || '';
+    const canonical = extractAttr(rawHtml.match(/<link\b[^>]*rel=["']canonical["'][^>]*>/i)?.[0] || '', 'href') || '';
+    const paginacion = Boolean(rawHtml.match(/<link\b[^>]*rel=["'](?:next|prev)["'][^>]*>/i));
+
+    const noindex = /noindex/i.test(metaRobots);
+    const motivosNoIndex = [];
+    if (noindex) motivosNoIndex.push(`Directiva noindex (${metaRobots})`);
+
+    const fragmentos = { ...(data?.fragmentos || {}) };
+    const firstH1 = rawHtml.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/i)?.[0] || '';
+    const firstImgSinAlt =
+      ([...rawHtml.matchAll(/<img\b[^>]*>/gi)]
+        .map((m) => m[0])
+        .find((tag) => !hasAttr(tag, 'alt') || !(extractAttr(tag, 'alt') || '').trim())) || '';
+
+    if (firstH1 && !fragmentos.h1) fragmentos.h1 = recortarTexto(firstH1, 250);
+    if (firstImgSinAlt && !fragmentos.img_sin_alt) fragmentos.img_sin_alt = recortarTexto(firstImgSinAlt, 250);
+    if (primerJsonLdMalo && !fragmentos.jsonld_invalido) fragmentos.jsonld_invalido = primerJsonLdMalo;
+
+    const elementosAnomalos = [...(Array.isArray(data?.elementos_anomalos) ? data.elementos_anomalos : [])];
+    if (noindex) elementosAnomalos.push('Página marcada como noindex');
+    if (schemaInvalidos.length > 0) elementosAnomalos.push('Schema JSON-LD con errores de sintaxis');
+    if (media?.heroHasLazy) elementosAnomalos.push('Posible imagen hero con loading="lazy"');
+
+    const riesgoSeo =
+      data?.riesgo_seo ||
+      (noindex || schemaInvalidos.length > 0 ? 'alto' : elementosAnomalos.length > 0 ? 'medio' : 'bajo');
+
+    return {
+      url: data?.url || targetUrl,
+      tipo_pagina: data?.tipo_pagina || 'Página web',
+      status: data?.status ?? 200,
+      indexable: typeof data?.indexable === 'boolean' ? data.indexable : !noindex,
+      motivo_no_indexable:
+        data?.motivo_no_indexable ||
+        (motivosNoIndex.length > 0 ? motivosNoIndex.join(', ') : 'Indexable'),
+      title: data?.title ?? '',
+      h1: data?.h1 ?? '',
+      h2: Array.isArray(data?.h2) ? data.h2 : h2Matches,
+      titulos_div_span: Array.isArray(data?.titulos_div_span) ? data.titulos_div_span.slice(0, 5) : divSpanTitles,
+      meta_descripcion: data?.meta_descripcion ?? '',
+      canonical: data?.canonical ?? canonical,
+      robots: data?.robots || metaRobots || 'index, follow',
+      datos_estructurados: Array.isArray(data?.datos_estructurados) ? data.datos_estructurados : tiposSchema,
+      schema_formatos: Array.isArray(data?.schema_formatos) ? data.schema_formatos : formatosSchema,
+      schema_json_invalido: Array.isArray(data?.schema_json_invalido) ? data.schema_json_invalido : schemaInvalidos,
+      imagenes_sin_alt:
+        typeof data?.imagenes_sin_alt === 'number'
+          ? data.imagenes_sin_alt
+          : Number((media?.missingAltAttrCount || 0) + (media?.emptyAltCount || 0)),
+      total_imagenes:
+        typeof data?.total_imagenes === 'number' ? data.total_imagenes : Number(media?.totalImages || 0),
+      paginacion_detectada:
+        typeof data?.paginacion_detectada === 'boolean' ? data.paginacion_detectada : paginacion,
+      enlaces_internos_salientes:
+        typeof data?.enlaces_internos_salientes === 'number' ? data.enlaces_internos_salientes : internos,
+      anchors: Array.isArray(data?.anchors) ? data.anchors.slice(0, 15) : anchors.slice(0, 15),
+      wpo_lazy_header:
+        typeof data?.wpo_lazy_header === 'boolean'
+          ? data.wpo_lazy_header
+          : Boolean(data?.wpo?.headerLazyProblem || media?.heroHasLazy),
+      wpo_sin_dimensiones:
+        typeof data?.wpo_sin_dimensiones === 'number'
+          ? data.wpo_sin_dimensiones
+          : Number(media?.missingDimensionsCount || 0),
+      palabras: typeof data?.palabras === 'number' ? data.palabras : palabras,
+      palabras_info:
+        data?.palabras_info ||
+        (palabras < 150
+          ? 'Recuento bajo en HTML inicial; posible renderizado en cliente (CSR) o contenido breve.'
+          : 'Recuento extraído del HTML estático recibido.'),
+      wpo: data?.wpo || null,
+      extra: data?.extra || null,
+      fragmentos,
+      riesgo_seo: riesgoSeo,
+      elementos_anomalos: elementosAnomalos,
+    };
+  }
+
+  async function tryDirectHtmlMediaAudit(targetUrl) {
+    try {
+      const resp = await fetch(targetUrl, { mode: 'cors' });
+      if (!resp.ok) return null;
+      const htmlText = await resp.text();
+      return buildMediaAuditFromHtml(htmlText);
+    } catch {
+      return null;
+    }
+  }
+
+  function mostrar(v) {
+    for (const x of ['inicio', 'cargando', 'resultado']) {
+      const el = $('#vista-' + x);
+      if (el) el.classList.toggle('oculto', x !== v);
+    }
+  }
+
+  function animarCarga() {
+    const items = [...document.querySelectorAll('.lista-carga li')];
+    let i = 0;
+    const paso = () => {
+      items.forEach((li, k) => {
+        li.classList.toggle('activo', k === i);
+        li.classList.toggle('puntos', k === i);
+      });
+      i = Math.min(i + 1, items.length - 1);
+    };
+    paso();
+    clearInterval(temporizador);
+    temporizador = setInterval(paso, 1200);
+  }
+
+  async function auditar(rawUrl, desdeEnlace) {
+    const err = $('#error');
+    const boton = $('#form-comprobar button');
+    err.classList.add('oculto');
+    limpiarTimers();
+
+    if (!rawUrl) {
+      err.textContent = 'Escribe la dirección de una página, por ejemplo https://midominio.com.';
+      err.classList.remove('oculto');
+      return;
+    }
+
+    const url = /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
+    boton.disabled = true;
+    $('#cargando-dominio').textContent = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    mostrar('cargando');
+    animarCarga();
+
+    try {
+      const r = await fetch('/api/seo-audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'No se pudo analizar esta URL.');
+
+      RES = j;
+      if (!RES.mediaAudit) {
+        RES.mediaAudit =
+          buildMediaAuditFromHtml(RES.html) ||
+          (await tryDirectHtmlMediaAudit(RES.url || url));
+      }
+      RES.extendedAudit = buildExtendedAuditFallback(RES, RES.url || url);
+
+      const q = '?url=' + encodeURIComponent(RES.url || url);
+      if (location.search !== q) {
+        history[desdeEnlace ? 'replaceState' : 'pushState'](null, '', location.pathname + q);
+      }
+
+      const checklistSegura = Array.isArray(RES.checklist) ? RES.checklist : [];
+      const pasadas = checklistSegura.filter((c) => c.pass).length;
+      document.title = `${pasadas} de ${checklistSegura.length} reglas SEO superadas — Quick SEO Fixer`;
+
+      pintar();
+      mostrar('resultado');
+      window.scrollTo({ top: 0 });
+      $('#veredicto')?.focus({ preventScroll: true });
+    } catch (ex) {
+      mostrar('inicio');
+      err.textContent = ex?.message || 'Error al analizar la URL.';
+      err.classList.remove('oculto');
+      $('#url').focus();
+    } finally {
+      boton.disabled = false;
+      clearInterval(temporizador);
+      temporizador = null;
+    }
+  }
+
+  $('#form-comprobar').addEventListener('submit', (e) => {
+    e.preventDefault();
+    auditar($('#url').value.trim(), false);
+  });
+
+  function formatKeyValueSummary(obj) {
+    if (!obj || typeof obj !== 'object') return '';
+    return Object.entries(obj)
+      .filter(([, v]) => v !== null && v !== undefined && v !== '')
+      .map(([k, v]) => `${k}: ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`)
+      .join(' · ');
+  }
+
+  function pintar() {
+    const r = RES;
+    if (!r) return;
+
+    const ext = r.extendedAudit || buildExtendedAuditFallback(r, r.url);
+    const checklist = Array.isArray(r.checklist) ? r.checklist : [];
+    const pasadas = checklist.filter((c) => c.pass).length;
+    const total = checklist.length;
+    const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const nota =
+      total > 0 && pasadas === total
+        ? 'Todas las etiquetas críticas están bien configuradas. Abajo tienes el Schema JSON-LD y el análisis semántico por embeddings.'
+        : 'Hay oportunidades claras de mejora. Copia los parches generados abajo para corregir los puntos marcados en rojo.';
+
+    const checksHtml = checklist
+      .map(
+        (c) => `
+      <li>
+        <span class="ico ${c.pass ? 'ok' : 'problema'}" aria-hidden="true">${c.pass ? '✓' : '✕'}</span>
+        <strong>${esc(c.rule)}</strong>
+        <span class="t">${esc(c.value)}</span>
+      </li>`
+      )
+      .join('');
+
+    const media = r.mediaAudit || null;
+    const mediaHtml = media
+      ? `
+        <ul class="checks">
+          <li>
+            <span class="ico ${media.heroHasLazy ? 'problema' : 'ok'}" aria-hidden="true">${media.heroHasLazy ? '✕' : '✓'}</span>
+            <strong>Hero / Imagen principal</strong>
+            <span class="t">${esc(media.heroSummary || 'Sin candidato hero detectado')}</span>
+          </li>
+          <li>
+            <span class="ico ok" aria-hidden="true">i</span>
+            <strong>Reparto de lazy loading</strong>
+            <span class="t">${Number(media.lazyImagesCount || 0)} con loading="lazy" · ${Number(media.nonLazyImagesCount || 0)} sin lazy (${Number(media.eagerImagesCount || 0)} eager · ${Number(media.dataSrcImagesCount || 0)} data-src)</span>
+          </li>
+          <li>
+            <span class="ico ${Number(media.missingDimensionsCount || 0) > 0 ? 'problema' : 'ok'}" aria-hidden="true">${Number(media.missingDimensionsCount || 0) > 0 ? '!' : '✓'}</span>
+            <strong>Dimensiones (CLS) y prioridad</strong>
+            <span class="t">${Number(media.missingDimensionsCount || 0)} imágenes sin width/height explícitos · ${Number(media.highPriorityImagesCount || 0)} con fetchpriority="high"</span>
+          </li>
+          <li>
+            <span class="ico ${Number(media.missingAltAttrCount || 0) > 0 ? 'problema' : 'ok'}" aria-hidden="true">${Number(media.missingAltAttrCount || 0) > 0 ? '✕' : '✓'}</span>
+            <strong>Atributo alt y adaptabilidad</strong>
+            <span class="t">${Number(media.missingAltAttrCount || 0)} sin atributo alt · ${Number(media.emptyAltCount || 0)} con alt vacío · ${Number(media.responsiveSrcsetCount || 0)} con srcset · ${Number(media.picturesCount || 0)} &lt;picture&gt;</span>
+          </li>
+          <li>
+            <span class="ico ok" aria-hidden="true">i</span>
+            <strong>Iframes y vídeos</strong>
+            <span class="t">${Number(media.lazyIframesCount || 0)}/${Number(media.iframesCount || 0)} iframes con lazy · ${Number(media.videosCount || 0)} vídeos (${Number(media.videosWithPoster || 0)} con poster · ${Number(media.videosPreloadNone || 0)} preload="none")</span>
+          </li>
+        </ul>
+      `
+      : `<p class="nota">No se pudo leer el HTML directo de la URL (posible bloqueo CORS del servidor destino).</p>`;
+
+    const riesgoClase =
+      String(ext.riesgo_seo || '').toLowerCase() === 'alto'
+        ? 'problema'
+        : String(ext.riesgo_seo || '').toLowerCase() === 'medio'
+          ? 'aviso'
+          : 'ok';
+
+    const h2Texto = Array.isArray(ext.h2) && ext.h2.length ? `${ext.h2.length} H2 (${ext.h2.slice(0, 4).join(' · ')})` : 'Ninguno';
+    const divSpanTexto = Array.isArray(ext.titulos_div_span) && ext.titulos_div_span.length
+      ? ext.titulos_div_span.join(' · ')
+      : 'Ninguno detectado';
+    const schemaTiposTexto = Array.isArray(ext.datos_estructurados) && ext.datos_estructurados.length
+      ? ext.datos_estructurados.join(', ')
+      : 'Ninguno';
+    const schemaFormatosTexto = Array.isArray(ext.schema_formatos) && ext.schema_formatos.length
+      ? ext.schema_formatos.join(', ')
+      : 'Ninguno';
+    const schemaInvalidosTexto = Array.isArray(ext.schema_json_invalido) && ext.schema_json_invalido.length
+      ? ext.schema_json_invalido.join(' · ')
+      : 'Ninguno';
+    const anomaliasTexto = Array.isArray(ext.elementos_anomalos) && ext.elementos_anomalos.length
+      ? ext.elementos_anomalos.join(' · ')
+      : 'Sin anomalías críticas';
+    const anchorsTexto = Array.isArray(ext.anchors) && ext.anchors.length
+      ? ext.anchors
+          .map((a) => (typeof a === 'string' ? a : `${a.text || '(sin texto)'} → ${a.href || ''}`))
+          .join(' | ')
+      : 'Sin anchors registrados';
+
+    const wpoSummary = typeof ext.wpo === 'string' ? ext.wpo : formatKeyValueSummary(ext.wpo);
+    const extraSummary = typeof ext.extra === 'string' ? ext.extra : formatKeyValueSummary(ext.extra);
+
+    const fragmentosEntries = Object.entries(ext.fragmentos || {}).filter(([, v]) => Boolean(String(v || '').trim()));
+    const fragmentosRaw = fragmentosEntries
+      .map(([k, v]) => `/* ${k} */\n${String(v)}`)
+      .join('\n\n');
+
+    const patches = r.patches || {};
+    const optTitle = String(patches.optimized_title || '');
+    const optDesc = String(patches.optimized_description || '');
+    const jsonLd = String(patches.json_ld || '{}');
+
+    const htmlSnippet = `<title>${optTitle}</title>\n<meta name="description" content="${optDesc}">`;
+    const schemaSnippet = `<script type="application/ld+json">\n${jsonLd}\n<` + `/script>`;
+    snippetsCopiables = [htmlSnippet, schemaSnippet];
+    let idxFragmentos = -1;
+    if (fragmentosRaw) {
+      idxFragmentos = snippetsCopiables.length;
+      snippetsCopiables.push(fragmentosRaw);
+    }
+
+    $('#vista-resultado').innerHTML = `
+      <article class="ficha" aria-labelledby="veredicto">
+        <div class="ficha-cab">
+          <strong>${esc(r.url || ext.url || '')}</strong>
+          <span>Auditado el ${fecha} · HTTP ${esc(ext.status)} · Riesgo: ${esc(ext.riesgo_seo)}</span>
+        </div>
+
+        <div class="veredicto" id="veredicto" tabindex="-1">
+          <div class="n">${pasadas}<span>/${total}</span></div>
+          <h2>reglas críticas de SEO On-Page superadas</h2>
+        </div>
+        <p class="veredicto-nota">${nota}</p>
+
+        <section class="bloque">
+          <h3>1. Checklist Técnico On-Page</h3>
+          <p>Diagnóstico determinista extraído directamente del código HTML de la página.</p>
+          <ul class="checks">${checksHtml}</ul>
+        </section>
+
+        <section class="bloque" id="bloque-media">
+          <h3>Hero, Lazy Loading y Media</h3>
+          <p>Revisa si la imagen principal o hero tiene lazy load mal aplicado y cómo se reparten las cargas diferidas en la página.</p>
+          ${mediaHtml}
+        </section>
+
+        <section class="bloque" id="bloque-extendido">
+          <h3>Diagnóstico extendido, WPO y señales extra</h3>
+          <p>Estado de indexación, estructura de encabezados, Schema, enlaces, recuento de palabras y evidencias del HTML.</p>
+          <ul class="checks">
+            <li>
+              <span class="ico ${ext.indexable ? 'ok' : 'problema'}" aria-hidden="true">${ext.indexable ? '✓' : '✕'}</span>
+              <strong>Indexación y Robots</strong>
+              <span class="t">${esc(ext.motivo_no_indexable)} · robots: ${esc(ext.robots)} · canonical: ${esc(ext.canonical || 'Ausente')}</span>
+            </li>
+            <li>
+              <span class="ico ok" aria-hidden="true">i</span>
+              <strong>Tipo de página y Paginación</strong>
+              <span class="t">Tipo: ${esc(ext.tipo_pagina)} · Paginación detectada: ${ext.paginacion_detectada ? 'Sí' : 'No'}</span>
+            </li>
+            <li>
+              <span class="ico ${Array.isArray(ext.titulos_div_span) && ext.titulos_div_span.length > 0 ? 'aviso' : 'ok'}" aria-hidden="true">i</span>
+              <strong>Encabezados (H2 y div/span)</strong>
+              <span class="t">H2: ${esc(h2Texto)} · Posibles títulos en div/span: ${esc(divSpanTexto)}</span>
+            </li>
+            <li>
+              <span class="ico ${Array.isArray(ext.schema_json_invalido) && ext.schema_json_invalido.length > 0 ? 'problema' : 'ok'}" aria-hidden="true">${Array.isArray(ext.schema_json_invalido) && ext.schema_json_invalido.length > 0 ? '✕' : '✓'}</span>
+              <strong>Datos estructurados (Schema)</strong>
+              <span class="t">Tipos: ${esc(schemaTiposTexto)} · Formatos: ${esc(schemaFormatosTexto)} · JSON inválido: ${esc(schemaInvalidosTexto)}</span>
+            </li>
+            <li>
+              <span class="ico ok" aria-hidden="true">i</span>
+              <strong>Imágenes, Enlaces y Anchors</strong>
+              <span class="t">Imágenes: ${Number(ext.imagenes_sin_alt || 0)} sin alt de ${Number(ext.total_imagenes || 0)} · Enlaces internos salientes: ${Number(ext.enlaces_internos_salientes || 0)} · Anchors: ${esc(anchorsTexto)}</span>
+            </li>
+            <li>
+              <span class="ico ${ext.wpo_lazy_header || Number(ext.wpo_sin_dimensiones || 0) > 0 ? 'aviso' : 'ok'}" aria-hidden="true">!</span>
+              <strong>Métricas WPO y Palabras</strong>
+              <span class="t">Lazy header: ${ext.wpo_lazy_header ? 'Sí' : 'No'} · Sin dimensiones: ${Number(ext.wpo_sin_dimensiones || 0)} · Palabras: ${Number(ext.palabras || 0)} (${esc(ext.palabras_info)})</span>
+            </li>
+            <li>
+              <span class="ico ${riesgoClase}" aria-hidden="true">${riesgoClase === 'ok' ? '✓' : '!'}</span>
+              <strong>Riesgo SEO y Anomalías</strong>
+              <span class="t">Nivel ${esc(ext.riesgo_seo)} · ${esc(anomaliasTexto)}</span>
+            </li>
+            ${
+              wpoSummary
+                ? `<li>
+                    <span class="ico ok" aria-hidden="true">i</span>
+                    <strong>Detalle WPO</strong>
+                    <span class="t">${esc(wpoSummary)}</span>
+                  </li>`
+                : ''
+            }
+            ${
+              extraSummary
+                ? `<li>
+                    <span class="ico ok" aria-hidden="true">i</span>
+                    <strong>Señales extra</strong>
+                    <span class="t">${esc(extraSummary)}</span>
+                  </li>`
+                : ''
+            }
+          </ul>
+
+          ${
+            fragmentosRaw
+              ? `<div class="sub-detalle">
+                  <h4>Fragmentos HTML literales detectados</h4>
+                  <div class="codigo">
+                    <pre>${esc(fragmentosRaw)}</pre>
+                    <button type="button" data-copy-index="${idxFragmentos}">Copiar</button>
+                  </div>
+                </div>`
+              : ''
+          }
+        </section>
+
+        <section class="bloque">
+          <h3>2. Parches listos para producción</h3>
+          <p>Código generado automáticamente a partir del contenido real de tu página.</p>
+
+          <div class="parche-item">
+            <h4>Etiquetas Title y Meta Description</h4>
+            <div class="codigo">
+              <pre>${esc(htmlSnippet)}</pre>
+              <button type="button" data-copy-index="0">Copiar</button>
+            </div>
+          </div>
+
+          <div class="parche-item">
+            <h4>Datos estructurados (Schema JSON-LD)</h4>
+            <div class="codigo">
+              <pre>${esc(schemaSnippet)}</pre>
+              <button type="button" data-copy-index="1">Copiar</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="bloque" id="bloque-semantica">
+          <h3>3. Tratamiento temático y profundidad (Embeddings)</h3>
+          <p>Detecta automáticamente el tema de la página y evalúa si el contenido lo desarrolla con coherencia y extensión suficiente —sin que tengas que introducir ninguna palabra clave.</p>
+          <button type="button" class="boton" id="btn-semantica">Analizar enfoque temático</button>
+          <div id="semantica-progreso-wrap" class="estado-ia oculto">
+            <div id="semantica-estado">Iniciando...</div>
+            <div class="barra-progreso" aria-hidden="true"><span id="semantica-barra"></span></div>
+          </div>
+          <div id="semantica-resultado" class="oculto" style="margin-top:14px"></div>
+
+          <div class="cluster-box" id="cluster-box">
+            <h4>Clústeres temáticos de blog o listado de URLs</h4>
+            <p class="nota" style="margin:0 0 10px">Pega la URL de un <code>sitemap.xml</code> o varias URLs (una por línea, hasta ${MAX_PAGES} páginas) para agrupar artículos y explicar por qué se relacionan o solapan.</p>
+            <textarea id="cluster-urls" rows="4" placeholder="https://tudominio.com/sitemap_index.xml&#10;o una URL por línea..."></textarea>
+            <div class="cluster-grid-opts">
+              <label for="cluster-filter" class="nota" style="margin:0">Filtro ruta:</label>
+              <input id="cluster-filter" type="text" placeholder="/noticias/ o /blog/" style="font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff;width:155px">
+
+              <label for="cluster-limit" class="nota" style="margin:0">Máx. páginas:</label>
+              <select id="cluster-limit" style="font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="120" selected>120</option>
+              </select>
+
+              <label for="cluster-threshold" class="nota" style="margin:0">Agrupación:</label>
+              <select id="cluster-threshold" style="font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff">
+                <option value="0.78">Amplia (intención/formato)</option>
+                <option value="0.84" selected>Equilibrada</option>
+                <option value="0.89">Estricta (mismo tema)</option>
+              </select>
+
+              <button type="button" class="boton" id="btn-cluster-blog">Generar clústeres</button>
+            </div>
+            <div id="cluster-estado" class="nota" style="margin-top:8px"></div>
+            <div id="cluster-resultado" style="margin-top:14px"></div>
+          </div>
+        </section>
+      </article>
+
+      <div class="acciones">
+        <button class="boton linea" type="button" id="otra">Auditar otra página</button>
+        <div class="compartir">
+          <a href="#" id="copiar-enlace">Copiar enlace del informe</a>
+        </div>
+      </div>
+    `;
+
+    document.querySelectorAll('[data-copy-index]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-copy-index'));
+        const texto = snippetsCopiables[idx] || '';
+        copiarTexto(texto, btn);
+      });
+    });
+
+    $('#btn-semantica')?.addEventListener('click', () => {
+      const btnSem = $('#btn-semantica');
+      const resSem = $('#semantica-resultado');
+      try {
+        if (btnSem) btnSem.disabled = true;
+        resSem?.classList.add('oculto');
+        ponerProgresoSem('Iniciando análisis semántico...', 8);
+
+        clearTimeout(semTimeout);
+        semTimeout = setTimeout(() => {
+          liberarBotonSem('Está tardando más de lo esperado. Revisa la consola del navegador (F12) si persiste.');
+        }, 45000);
+
+        semanticWorker.postMessage({
+          type: 'ANALYZE_SEMANTICS',
+          payload: {
+            title: r.title || ext.title || '',
+            h1: r.h1 || ext.h1 || '',
+            bodyText: r.bodyText || '',
+          },
+        });
+      } catch (e) {
+        liberarBotonSem(e?.message || 'No se pudo enviar la tarea al worker.');
+      }
+    });
+
+    $('#btn-cluster-blog')?.addEventListener('click', async () => {
+      const btnCluster = $('#btn-cluster-blog');
+      const estadoCluster = $('#cluster-estado');
+      const salidaCluster = $('#cluster-resultado');
+      const rawUrls = $('#cluster-urls')?.value || '';
+      const pathFilter = ($('#cluster-filter')?.value || '').trim();
+      const limit = Math.min(Math.max(Number($('#cluster-limit')?.value || MAX_PAGES), 2), MAX_PAGES);
+      const threshold = Number($('#cluster-threshold')?.value || 0.84);
+
+      try {
+        if (btnCluster) btnCluster.disabled = true;
+        if (salidaCluster) salidaCluster.innerHTML = '';
+        if (estadoCluster) estadoCluster.textContent = 'Resolviendo URLs del blog o sitemap...';
+        ponerProgresoSem('Extrayendo URLs...', 10);
+
+        const urls = await obtenerUrlsDesdeEntrada(rawUrls, pathFilter, limit);
+        if (urls.length < 2) {
+          throw new Error('Se encontraron menos de 2 URLs válidas. Revisa el filtro de ruta o el sitemap.');
+        }
+
+        if (estadoCluster) {
+          estadoCluster.textContent = `Sitemap: ${urls.length} URLs (máx. ${limit}). Leyendo contenidos...`;
+        }
+
+        const posts = [];
+        const batchSize = 8;
+        for (let i = 0; i < urls.length; i += batchSize) {
+          const lote = urls.slice(i, i + batchSize);
+          const leidas = Math.min(i + lote.length, urls.length);
+          if (estadoCluster) {
+            estadoCluster.textContent = `Sitemap: ${urls.length} URLs · Analizadas ${posts.length} (procesando ${leidas}/${urls.length})...`;
+          }
+          ponerProgresoSem(`Leyendo páginas (${leidas}/${urls.length})...`, 10 + Math.round((leidas / urls.length) * 40));
+
+          const batchResults = await Promise.all(
+            lote.map(async (u) => {
+              try {
+                const resp = await fetch('/api/seo-audit', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ url: u }),
+                });
+                if (!resp.ok) return null;
+                const d = await resp.json();
+                return {
+                  url: d.url || u,
+                  title: d.title || '',
+                  h1: d.h1 || '',
+                  bodyText: d.bodyText || '',
+                };
+              } catch {
+                return null;
+              }
+            })
+          );
+          posts.push(...batchResults.filter(Boolean));
+        }
+
+        if (posts.length < 2) {
+          throw new Error('No se pudieron extraer al menos 2 páginas válidas para formar clústeres.');
+        }
+
+        if (estadoCluster) {
+          estadoCluster.textContent = `Analizadas ${posts.length} de ${urls.length} URLs del sitemap. Generando clústeres...`;
+        }
+
+        clearTimeout(semTimeout);
+        semTimeout = setTimeout(() => {
+          liberarBotonSem('El clustering está tardando más de lo esperado.');
+        }, 120000);
+
+        semanticWorker.postMessage({
+          type: 'CLUSTER_BLOG',
+          payload: { posts, threshold },
+        });
+      } catch (err) {
+        liberarBotonSem(err?.message || 'Error al preparar los contenidos para clustering.');
+      }
+    });
+
+    $('#otra')?.addEventListener('click', () => {
+      limpiarTimers();
+      history.pushState(null, '', location.pathname);
+      mostrar('inicio');
+      const inputUrl = $('#url');
+      if (inputUrl) {
+        inputUrl.value = '';
+        inputUrl.focus();
+      }
+    });
+
+    $('#copiar-enlace')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const targetUrl = r.url || ext.url || location.href;
+      const enlace = location.origin + location.pathname + '?url=' + encodeURIComponent(targetUrl);
+      try {
+        await navigator.clipboard.writeText(enlace);
+        e.currentTarget.textContent = 'Enlace copiado';
+      } catch {
+        e.currentTarget.textContent = 'No se pudo copiar';
+      }
+    });
+  }
+
+  function ruta() {
+    const u = new URLSearchParams(location.search).get('url');
+    if (u) {
+      $('#url').value = u;
+      auditar(u, true);
+    } else {
+      limpiarTimers();
+      mostrar('inicio');
+    }
+  }
+  window.addEventListener('popstate', ruta);
+  ruta();
+</script>
+</body>
+</html>

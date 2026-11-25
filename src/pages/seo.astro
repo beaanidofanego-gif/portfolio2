@@ -1,0 +1,197 @@
+---
+const colabUrl =
+    "https://colab.research.google.com/drive/1Fr4laYsd191AeaATWypQzryB1kekuhEh?usp=sharing";
+---
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Automatización SEO con Python | Mi Portfolio</title>
+        <meta
+            name="description"
+            content="Proyecto de automatización SEO con Python desarrollado en Google Colab."
+        />
+    </head>
+
+    <body>
+        <main class="container">
+            <a class="back" href="/">← Volver al portfolio</a>
+
+            <section class="hero">
+                <p class="tag">PROYECTO · SEO & AUTOMATIZACIÓN</p>
+
+                <h1>Automatización SEO con Python</h1>
+
+                <p class="intro">
+                    Un proyecto orientado a automatizar tareas SEO mediante
+                    Python, optimizar procesos y facilitar el análisis de
+                    información.
+                </p>
+
+                <a
+                    class="button"
+                    href={colabUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Abrir proyecto en Google Colab ↗
+                </a>
+            </section>
+
+            <section class="details">
+                <h2><strong>Sobre el proyecto</strong></h2>
+                <br />
+                <p>
+                    Desarrollé este proyecto a partir de una necesidad concreta,
+                    medir la autoridad de un sitio web dentro de un clúster
+                    temático específico. Para dar respuesta a este reto, creé
+                    este script en Python integrado con la API de Google Search
+                    Console, capaz de recopilar datos de rendimiento, agrupar
+                    consultas en clústeres semánticos y evaluar el
+                    posicionamiento de cada temática a partir de una serie de
+                    métricas clave. El objetivo es transformar los datos de
+                    Search Console en información estratégica que permita
+                    comprender mejor la relevancia y la autoridad temática del
+                    sitio web, identificar oportunidades de mejora y orientar la
+                    estrategia SEO en función de los resultados.
+                </p>
+                <br />
+
+                <ol>
+                    <li>
+                        <strong>1️⃣ Cobertura temática → </strong>cuánto
+                        contenido aportamos en cada tema
+                    </li>
+                    <li>
+                        <strong>2️⃣ Demanda → </strong>cuánta gente busca ese
+                        tema
+                    </li>
+                    <li>
+                        <strong>3️⃣ Visibilidad → </strong>si realmente estamos
+                        apareciendo ahí
+                    </li>
+                    <li>
+                        <strong>4️⃣ Eficiencia →</strong>si el CTR está por
+                        encima o por debajo de lo esperado
+                    </li>
+                    <li>
+                        <strong>5️⃣ Autoridad → </strong>si Google nos reconoce
+                        como referente
+                    </li>
+                </ol>
+
+                <h2><strong>Tecnologías utilizadas</strong></h2>
+                <br />
+                <div class="tags">
+                    <span>Python</span>
+                    <span>Google Colab</span>
+                    <span>SEO</span>
+                    <span>Automatización</span>
+                </div>
+
+            </section>
+        </main>
+    </body>
+</html>
+
+<style>
+    :global(body) {
+        margin: 0;
+        font-family: "Onest Variable";
+        background: #f8fafc;
+        color: #172033;
+        line-height: 1.7;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+    }
+
+    .back {
+        color: #475569;
+        text-decoration: none;
+    }
+
+    .hero {
+        padding: 70px 0 55px;
+    }
+
+    .tag {
+        color: #9822ed;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+    }
+
+    h1 {
+        max-width: 750px;
+        font-size: clamp(2.5rem, 7vw, 4.5rem);
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+    }
+
+    .intro {
+        max-width: 650px;
+        color: #64748b;
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 13px 20px;
+        background: #cc85ff;
+        color: white;
+        border-radius: 9px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .details {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 32px;
+    }
+
+    .details h2 {
+        margin-top: 28px;
+        font-size: 1.4rem;
+    }
+
+    .details h2:first-child {
+        margin-top: 0;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tags span {
+        padding: 6px 12px;
+        background: #eff6ff;
+        color: #9822ed;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 28px 18px 50px;
+        }
+
+        .hero {
+            padding: 45px 0;
+        }
+
+        .details {
+            padding: 22px;
+        }
+    }
+</style>
