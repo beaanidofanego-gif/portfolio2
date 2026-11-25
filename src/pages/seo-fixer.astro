@@ -1,14 +1,14 @@
 ---
 /**
  * Quick SEO Fixer — Auditoría On-Page, Parches Schema y Análisis Semántico en el navegador.
- * Ruta: /herramientas/seo-fixer
+ * Ruta: /seo-fixer
  */
 const MARCA = "Bea Anido";
 const URL_PORTFOLIO = "/";
 const URL_PRIVACIDAD = "/privacidad";
 const URL_CAFE = "https://paypal.me/beaanido";
 const TEXTO_CAFE = "Invítame a un café";
-const URL_CANONICA = new URL("/herramientas/seo-fixer", Astro.site ?? "https://www.beaanido.es").toString();
+const URL_CANONICA = new URL("/seo-fixer", Astro.site ?? "https://www.beaanido.es").toString();
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -210,7 +210,7 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
   <section class="portada" id="vista-inicio">
     <h1>Audita tu SEO On-Page</h1>
     <p class="entradilla">Comprueba en segundos si las etiquetas de tu HTML están bien configuradas.</p>
-    <form class="comprobar" id="form-comprobar" novalidate>
+    <form class="comprobar" id="form-comprobar" action="javascript:void(0)" novalidate>
       <label class="sr" for="url">Dirección de la página</label>
       <input id="url" type="text" inputmode="url" autocomplete="url" placeholder="https://tudominio.com/pagina" required>
       <button class="boton" type="submit">Auditar URL</button>
@@ -918,10 +918,7 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
       }
       RES.extendedAudit = buildExtendedAuditFallback(RES, RES.url || url);
 
-      const q = '?url=' + encodeURIComponent(RES.url || url);
-      if (location.search !== q) {
-        history[desdeEnlace ? 'replaceState' : 'pushState'](null, '', location.pathname + q);
-      }
+      // URL limpia sin añadir ?url=... a la barra de direcciones
 
       const checklistSegura = Array.isArray(RES.checklist) ? RES.checklist : [];
       const pasadas = checklistSegura.filter((c) => c.pass).length;
