@@ -153,43 +153,28 @@ form.comprobar input:focus{outline:none;box-shadow:0 0 0 4px rgba(58,53,201,.25)
 .barra-progreso > span{display:block;height:100%;width:0%;background:var(--indigo);border-radius:999px;transition:width .25s ease}
 .estado-ia{margin-top:16px;padding:12px 16px;background:#fff;border-radius:8px;border:1px solid var(--linea);font-size:15px;font-weight:600;color:var(--indigo)}
 
-/* Leads y notoriedad */
-.lead-strip{
-  margin-top:24px;
-  padding:18px 22px;
-  background:var(--papel);
-  border:1px solid var(--linea);
-  border-radius:12px;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-}
-.lead-strip strong{display:block;font-family:var(--display);font-size:18px;margin-bottom:2px}
-.lead-strip p{margin:0;font-size:14.5px;color:var(--gris)}
-.lead-links{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
-
 .acciones{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:24px 0 0}
 .compartir{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14.5px}
 .compartir-etiqueta{color:var(--gris);margin-right:4px;font-weight:600}
 .rrss-btn{
   display:inline-flex;
   align-items:center;
-  gap:6px;
-  padding:7px 11px;
+  justify-content:center;
+  width:38px;
+  height:38px;
+  padding:0;
   border-radius:8px;
   border:1px solid var(--linea);
   background:var(--papel);
   color:var(--tinta);
   font:inherit;
-  font-size:13.5px;
-  font-weight:600;
   text-decoration:none;
   cursor:pointer;
   transition:border-color .15s ease,background-color .15s ease,color .15s ease;
 }
 .rrss-btn:hover{border-color:var(--indigo);color:var(--indigo);background:#F8F8FE}
+.rrss-btn.copiado{border-color:var(--ok);color:var(--ok);background:#F3FBF7}
+.rrss-btn .ico-svg{width:18px;height:18px;vertical-align:0}
 
 /* Footer y café un pelín más grande */
 footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;color:var(--gris)}
@@ -319,7 +304,6 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
     whatsapp: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 3.2a6.6 6.6 0 0 0-5.68 9.95L3.4 16.6l3.55-.9A6.6 6.6 0 1 0 10 3.2Zm3.68 9.35c-.16.45-.92.86-1.28.91-.34.05-.77.07-1.24-.08a11.3 11.3 0 0 1-3.36-1.66 6.9 6.9 0 0 1-1.6-2.01c-.2-.34-.42-.94-.18-1.45.2-.44.54-.64.78-.64h.56c.18 0 .42-.07.66.5.24.57.82 2 .89 2.15.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.45.54-.15.15-.3.32-.13.62.17.3.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.37 1.46.3.15.47.12.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.34.07.12.07.72-.09 1.17Z"/></svg>`,
     link: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.2 11.8a3.5 3.5 0 0 0 4.95 0l2.12-2.12a3.5 3.5 0 0 0-4.95-4.95L9.2 6.05m2.6 2.15a3.5 3.5 0 0 0-4.95 0L4.73 10.32a3.5 3.5 0 0 0 4.95 4.95l1.12-1.12"/></svg>`,
     refresh: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16 10a6 6 0 1 1-1.66-4.15M16 4.5v3.5h-3.5"/></svg>`,
-    arrowRight: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10h11m0 0-4.5-4.5M15.5 10l-4.5 4.5"/></svg>`,
   };
 
   let RES = null;
@@ -1230,19 +1214,6 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
         </section>
       </article>
 
-      <aside class="lead-strip" aria-label="Contacto y servicios SEO">
-        <div>
-          <strong>¿Quieres llevar esto a producción o auditar un proyecto completo?</strong>
-          <p>Desarrollo de herramientas SEO, automatizaciones en Python y auditoría técnica por ${esc(MARCA_NOMBRE)}.</p>
-        </div>
-        <div class="lead-links">
-          <a class="boton" href="${esc(URL_PORTFOLIO)}">
-            <span>Ver portfolio y contacto</span>
-            ${ICONOS.arrowRight}
-          </a>
-        </div>
-      </aside>
-
       <div class="acciones">
         <button class="boton linea" type="button" id="otra">
           ${ICONOS.refresh}
@@ -1250,21 +1221,17 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
         </button>
         <div class="compartir" aria-label="Compartir herramienta y resultado">
           <span class="compartir-etiqueta">Compartir:</span>
-          <a class="rrss-btn" href="${esc(linkedinHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir en LinkedIn">
+          <a class="rrss-btn" href="${esc(linkedinHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir en LinkedIn" title="Compartir en LinkedIn">
             ${ICONOS.linkedin}
-            <span>LinkedIn</span>
           </a>
-          <a class="rrss-btn" href="${esc(xHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir en X">
+          <a class="rrss-btn" href="${esc(xHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir en X" title="Compartir en X">
             ${ICONOS.x}
-            <span>X</span>
           </a>
-          <a class="rrss-btn" href="${esc(whatsappHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir por WhatsApp">
+          <a class="rrss-btn" href="${esc(whatsappHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir por WhatsApp" title="Compartir por WhatsApp">
             ${ICONOS.whatsapp}
-            <span>WhatsApp</span>
           </a>
-          <button class="rrss-btn" type="button" id="copiar-enlace">
+          <button class="rrss-btn" type="button" id="copiar-enlace" aria-label="Copiar enlace" title="Copiar enlace">
             ${ICONOS.link}
-            <span>Copiar enlace</span>
           </button>
         </div>
       </div>
@@ -1396,17 +1363,23 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
     });
 
     $('#copiar-enlace')?.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const labelEl = e.currentTarget.querySelector('span');
-      const originalText = labelEl?.textContent || 'Copiar enlace';
+      const btn = e.currentTarget;
+      const labelOriginal = 'Copiar enlace';
       try {
         await navigator.clipboard.writeText(URL_HERRAMIENTA);
-        if (labelEl) labelEl.textContent = 'Enlace copiado';
+        btn.classList.add('copiado');
+        btn.setAttribute('aria-label', 'Enlace copiado');
+        btn.setAttribute('title', 'Enlace copiado');
       } catch {
-        if (labelEl) labelEl.textContent = 'No se pudo copiar';
+        btn.setAttribute('aria-label', 'No se pudo copiar');
+        btn.setAttribute('title', 'No se pudo copiar');
       }
       setTimeout(() => {
-        if (labelEl && e.currentTarget.isConnected) labelEl.textContent = originalText;
+        if (btn.isConnected) {
+          btn.classList.remove('copiado');
+          btn.setAttribute('aria-label', labelOriginal);
+          btn.setAttribute('title', labelOriginal);
+        }
       }, 2000);
     });
   }
