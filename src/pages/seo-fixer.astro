@@ -53,10 +53,11 @@ a{color:var(--indigo)}
 .oculto{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 h1,h2,h3{font-family:var(--display);letter-spacing:-.015em}
+.ico-svg{width:17px;height:17px;flex:0 0 auto;display:inline-block;vertical-align:-3px}
 
 header.barra .env{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:20px;padding-bottom:20px}
 .marca{font-size:14px;color:var(--gris);text-decoration:none;text-align:right}
-.volver{font-size:15px;color:var(--gris);text-decoration:none}
+.volver{font-size:15px;color:var(--gris);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 .volver:hover{color:var(--tinta)}
 
 /* Portada */
@@ -66,7 +67,7 @@ header.barra .env{display:flex;justify-content:space-between;align-items:center;
 form.comprobar{display:flex;gap:10px;max-width:660px}
 form.comprobar input{flex:1;min-width:0;font:inherit;font-size:19px;padding:14px 16px;border:2px solid var(--tinta);border-radius:8px;background:#fff;color:var(--tinta)}
 form.comprobar input:focus{outline:none;box-shadow:0 0 0 4px rgba(58,53,201,.25)}
-.boton{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:8px;background:var(--indigo);color:#fff;padding:14px 22px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
+.boton{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:8px;background:var(--indigo);color:#fff;padding:14px 22px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .boton:hover{background:var(--indigo-osc)}
 .boton:disabled{opacity:.65;cursor:progress}
 .boton.linea{background:transparent;color:var(--tinta);border:2px solid var(--tinta);padding:12px 18px}
@@ -82,31 +83,6 @@ form.comprobar input:focus{outline:none;box-shadow:0 0 0 4px rgba(58,53,201,.25)
   border-radius:12px;
   overflow:hidden;
   box-shadow:0 16px 36px rgba(22,26,38,.12);
-}
-.terminal-cab{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  padding:11px 16px;
-  background:rgba(255,255,255,.05);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  font:12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  color:#9CA3B8;
-}
-.terminal-punto{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:rgba(231,233,242,.25);
-}
-.terminal-cab span:last-child{margin-left:auto}
-.terminal-vivo pre{
-  margin:0;
-  padding:20px 22px;
-  min-height:196px;
-  font:13.5px/1.68 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  white-space:pre-wrap;
-  word-break:break-word;
 }
 .cursor-vivo{
   display:inline-block;
@@ -177,9 +153,62 @@ form.comprobar input:focus{outline:none;box-shadow:0 0 0 4px rgba(58,53,201,.25)
 .barra-progreso > span{display:block;height:100%;width:0%;background:var(--indigo);border-radius:999px;transition:width .25s ease}
 .estado-ia{margin-top:16px;padding:12px 16px;background:#fff;border-radius:8px;border:1px solid var(--linea);font-size:15px;font-weight:600;color:var(--indigo)}
 
-.acciones{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:28px 0 0}
-.compartir{margin-left:auto;display:flex;flex-wrap:wrap;gap:16px;font-size:15px}
-footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;color:var(--gris)}
+/* Leads y notoriedad */
+.lead-strip{
+  margin-top:24px;
+  padding:18px 22px;
+  background:var(--papel);
+  border:1px solid var(--linea);
+  border-radius:12px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.lead-strip strong{display:block;font-family:var(--display);font-size:18px;margin-bottom:2px}
+.lead-strip p{margin:0;font-size:14.5px;color:var(--gris)}
+.lead-links{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+
+.acciones{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:24px 0 0}
+.compartir{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14.5px}
+.compartir-etiqueta{color:var(--gris);margin-right:4px;font-weight:600}
+.rrss-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 11px;
+  border-radius:8px;
+  border:1px solid var(--linea);
+  background:var(--papel);
+  color:var(--tinta);
+  font:inherit;
+  font-size:13.5px;
+  font-weight:600;
+  text-decoration:none;
+  cursor:pointer;
+  transition:border-color .15s ease,background-color .15s ease,color .15s ease;
+}
+.rrss-btn:hover{border-color:var(--indigo);color:var(--indigo);background:#F8F8FE}
+
+/* Footer y café un pelín más grande */
+footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;color:var(--gris)}
+.footer-env{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+.cafe-enlace{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:15.5px;
+  font-weight:600;
+  color:var(--tinta);
+  text-decoration:none;
+  padding:7px 13px;
+  border-radius:8px;
+  background:var(--papel);
+  border:1px solid var(--linea);
+  transition:border-color .15s ease,color .15s ease,background-color .15s ease;
+}
+.cafe-enlace:hover{border-color:var(--indigo);color:var(--indigo);background:#F8F8FE}
 
 @media (max-width:760px){
   body{font-size:16px}
@@ -201,7 +230,12 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
 <body>
 <header class="barra">
   <div class="env">
-    <a class="volver" href={URL_PORTFOLIO}>← Volver al portfolio</a>
+    <a class="volver" href={URL_PORTFOLIO}>
+      <svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.5 10h-11m0 0 4.5-4.5M4.5 10l4.5 4.5"/>
+      </svg>
+      <span>Volver al portfolio</span>
+    </a>
     <span class="marca">Una herramienta de <a href={URL_PORTFOLIO}>{MARCA}</a></span>
   </div>
 </header>
@@ -213,7 +247,13 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
     <form class="comprobar" id="form-comprobar" action="javascript:void(0)" novalidate>
       <label class="sr" for="url">Dirección de la página</label>
       <input id="url" type="text" inputmode="url" autocomplete="url" placeholder="https://tudominio.com/pagina" required>
-      <button class="boton" type="submit">Auditar URL</button>
+      <button class="boton" type="submit">
+        <svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="9" cy="9" r="5.5"/>
+          <path stroke-linecap="round" d="m13.2 13.2 3.3 3.3"/>
+        </svg>
+        <span>Auditar URL</span>
+      </button>
     </form>
     <p class="error oculto" id="error" role="alert"></p>
     <p class="nota">Gratis, sin registro y con análisis semántico.</p>
@@ -238,8 +278,18 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
 </main>
 
 <footer>
-  <div class="env">{MARCA}. Auditoría técnica On-Page gratuita. <a href={URL_PRIVACIDAD}>Política de privacidad</a>
-    {URL_CAFE && <> · <a href={URL_CAFE} target="_blank" rel="noopener">☕ {TEXTO_CAFE}</a></>}
+  <div class="env footer-env">
+    <div>
+      {MARCA}. Auditoría técnica On-Page gratuita. <a href={URL_PRIVACIDAD}>Política de privacidad</a>
+    </div>
+    {URL_CAFE && (
+      <a class="cafe-enlace" href={URL_CAFE} target="_blank" rel="noopener">
+        <svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h10v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8Zm10 1h2a2 2 0 0 1 0 4h-2M6 4v1.5M9.5 4v1.5M13 4v1.5"/>
+        </svg>
+        <span>{TEXTO_CAFE}</span>
+      </a>
+    )}
   </div>
 </footer>
 
@@ -248,6 +298,8 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
   import SeoSemanticWorker from '../workers/seo-semantic.worker.ts?worker';
 
   const MAX_PAGES = 120;
+  const MARCA_NOMBRE = "Bea Anido";
+  const URL_HERRAMIENTA = "https://www.beaanido.es/seo-fixer";
   const semanticWorker = new SeoSemanticWorker();
   const $ = (s) => document.querySelector(s);
   const mapaHtml = {
@@ -260,11 +312,19 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
   const esc = (t) =>
     String(t ?? '').replace(/[&<>"']/g, (c) => mapaHtml[c] || c);
 
+  const ICONOS = {
+    linkedin: `<svg class="ico-svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.2 3.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM4 8h2.4v8.5H4V8Zm4 0h2.3v1.2h.03c.32-.6 1.1-1.25 2.27-1.25 2.43 0 2.88 1.6 2.88 3.68V16.5H13.4v-3.77c0-.9-.02-2.06-1.25-2.06-1.25 0-1.45.98-1.45 2v3.83H8.3V8Z"/></svg>`,
+    x: `<svg class="ico-svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M14.8 3.5h2.2l-4.8 5.49 5.65 7.51h-4.43l-3.47-4.54-3.97 4.54H4.2l5.13-5.87L3.9 3.5h4.54l3.14 4.15 3.22-4.15Zm-.77 11.67h1.22L7.76 4.76H6.45l7.58 10.41Z"/></svg>`,
+    whatsapp: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 3.2a6.6 6.6 0 0 0-5.68 9.95L3.4 16.6l3.55-.9A6.6 6.6 0 1 0 10 3.2Zm3.68 9.35c-.16.45-.92.86-1.28.91-.34.05-.77.07-1.24-.08a11.3 11.3 0 0 1-3.36-1.66 6.9 6.9 0 0 1-1.6-2.01c-.2-.34-.42-.94-.18-1.45.2-.44.54-.64.78-.64h.56c.18 0 .42-.07.66.5.24.57.82 2 .89 2.15.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.45.54-.15.15-.3.32-.13.62.17.3.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.37 1.46.3.15.47.12.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.34.07.12.07.72-.09 1.17Z"/></svg>`,
+    link: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.2 11.8a3.5 3.5 0 0 0 4.95 0l2.12-2.12a3.5 3.5 0 0 0-4.95-4.95L9.2 6.05m2.6 2.15a3.5 3.5 0 0 0-4.95 0L4.73 10.32a3.5 3.5 0 0 0 4.95 4.95l1.12-1.12"/></svg>`,
+    refresh: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16 10a6 6 0 1 1-1.66-4.15M16 4.5v3.5h-3.5"/></svg>`,
+    arrowRight: `<svg class="ico-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10h11m0 0-4.5-4.5M15.5 10l-4.5 4.5"/></svg>`,
+  };
+
   let RES = null;
   let snippetsCopiables = [];
   let semTimeout = null;
   let temporizador = null;
-  let timerCodigoVivo = null;
 
   function limpiarTimers() {
     clearInterval(temporizador);
@@ -861,8 +921,6 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
       }
       RES.extendedAudit = buildExtendedAuditFallback(RES, RES.url || url);
 
-      // URL limpia sin añadir ?url=... a la barra de direcciones
-
       const checklistSegura = Array.isArray(RES.checklist) ? RES.checklist : [];
       const pasadas = checklistSegura.filter((c) => c.pass).length;
       document.title = `${pasadas} de ${checklistSegura.length} reglas SEO superadas — Quick SEO Fixer`;
@@ -1005,6 +1063,13 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
       idxFragmentos = snippetsCopiables.length;
       snippetsCopiables.push(fragmentosRaw);
     }
+
+    const targetUrl = r.url || ext.url || URL_HERRAMIENTA;
+    const textoCompartir = `He revisado ${targetUrl} con Quick SEO Fixer (${pasadas}/${total} reglas SEO críticas superadas) · Herramienta de ${MARCA_NOMBRE}`;
+    const urlCompartir = URL_HERRAMIENTA;
+    const linkedinHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(urlCompartir)}`;
+    const xHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(textoCompartir)}&url=${encodeURIComponent(urlCompartir)}`;
+    const whatsappHref = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${textoCompartir} — ${urlCompartir}`)}`;
 
     $('#vista-resultado').innerHTML = `
       <article class="ficha" aria-labelledby="veredicto">
@@ -1164,10 +1229,42 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
         </section>
       </article>
 
+      <aside class="lead-strip" aria-label="Contacto y servicios SEO">
+        <div>
+          <strong>¿Quieres llevar esto a producción o auditar un proyecto completo?</strong>
+          <p>Desarrollo de herramientas SEO, automatizaciones en Python y auditoría técnica por ${esc(MARCA_NOMBRE)}.</p>
+        </div>
+        <div class="lead-links">
+          <a class="boton" href="${esc(URL_PORTFOLIO)}">
+            <span>Ver portfolio y contacto</span>
+            ${ICONOS.arrowRight}
+          </a>
+        </div>
+      </aside>
+
       <div class="acciones">
-        <button class="boton linea" type="button" id="otra">Auditar otra página</button>
-        <div class="compartir">
-          <a href="#" id="copiar-enlace">Copiar enlace del informe</a>
+        <button class="boton linea" type="button" id="otra">
+          ${ICONOS.refresh}
+          <span>Auditar otra página</span>
+        </button>
+        <div class="compartir" aria-label="Compartir herramienta y resultado">
+          <span class="compartir-etiqueta">Compartir:</span>
+          <a class="rrss-btn" href="${esc(linkedinHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir en LinkedIn">
+            ${ICONOS.linkedin}
+            <span>LinkedIn</span>
+          </a>
+          <a class="rrss-btn" href="${esc(xHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir en X">
+            ${ICONOS.x}
+            <span>X</span>
+          </a>
+          <a class="rrss-btn" href="${esc(whatsappHref)}" target="_blank" rel="noopener noreferrer" aria-label="Compartir por WhatsApp">
+            ${ICONOS.whatsapp}
+            <span>WhatsApp</span>
+          </a>
+          <button class="rrss-btn" type="button" id="copiar-enlace">
+            ${ICONOS.link}
+            <span>Copiar enlace</span>
+          </button>
         </div>
       </div>
     `;
@@ -1299,14 +1396,17 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
 
     $('#copiar-enlace')?.addEventListener('click', async (e) => {
       e.preventDefault();
-      const targetUrl = r.url || ext.url || location.href;
-      const enlace = location.origin + location.pathname + '?url=' + encodeURIComponent(targetUrl);
+      const labelEl = e.currentTarget.querySelector('span');
+      const originalText = labelEl?.textContent || 'Copiar enlace';
       try {
-        await navigator.clipboard.writeText(enlace);
-        e.currentTarget.textContent = 'Enlace copiado';
+        await navigator.clipboard.writeText(URL_HERRAMIENTA);
+        if (labelEl) labelEl.textContent = 'Enlace copiado';
       } catch {
-        e.currentTarget.textContent = 'No se pudo copiar';
+        if (labelEl) labelEl.textContent = 'No se pudo copiar';
       }
+      setTimeout(() => {
+        if (labelEl && e.currentTarget.isConnected) labelEl.textContent = originalText;
+      }, 2000);
     });
   }
 
