@@ -273,51 +273,6 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14px;colo
   let temporizador = null;
   let timerCodigoVivo = null;
 
-  const MUESTRA_CODIGO_VIVO = `<title>SEO Técnico y Producto | Mi Web</title>
-<meta name="description" content="Auditoría HTML, parches listos y clústeres.">
-<script type="application/ld+json">
-{ "@type": "WebPage", "inLanguage": "es" }
-</scr` + `ipt>`;
-
-  function iniciarCodigoVivo() {
-    const el = $('#codigo-vivo');
-    if (!el) return;
-    clearTimeout(timerCodigoVivo);
-
-    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) {
-      el.textContent = MUESTRA_CODIGO_VIVO;
-      return;
-    }
-
-    let idx = 0;
-    el.textContent = '';
-
-    const tick = () => {
-      if ($('#vista-inicio')?.classList.contains('oculto')) {
-        timerCodigoVivo = setTimeout(tick, 500);
-        return;
-      }
-      if (idx <= MUESTRA_CODIGO_VIVO.length) {
-        el.textContent = MUESTRA_CODIGO_VIVO.slice(0, idx);
-        idx += 1;
-        const ch = MUESTRA_CODIGO_VIVO[idx - 1];
-        const pausa = ch === '\n' ? 95 : 22;
-        timerCodigoVivo = setTimeout(tick, pausa);
-      } else {
-        timerCodigoVivo = setTimeout(() => {
-          idx = 0;
-          el.textContent = '';
-          timerCodigoVivo = setTimeout(tick, 300);
-        }, 2600);
-      }
-    };
-
-    tick();
-  }
-
-  iniciarCodigoVivo();
-
   function limpiarTimers() {
     clearInterval(temporizador);
     clearTimeout(semTimeout);
