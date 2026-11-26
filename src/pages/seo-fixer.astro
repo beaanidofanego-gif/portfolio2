@@ -134,6 +134,7 @@ form.comprobar input:focus{outline:none;box-shadow:0 0 0 4px rgba(58,53,201,.25)
 .parche-item{margin-bottom:24px}
 .parche-item:last-child{margin-bottom:0}
 .parche-item h4{font-family:var(--display);font-size:19px;margin:0 0 6px}
+.schema-sugerencia{margin:0 0 8px;padding:10px 12px;border-radius:8px;background:#F5F6FA;border:1px solid var(--linea);font-size:14.5px;color:#2E3445}
 .codigo{position:relative}
 .codigo pre{background:var(--tinta);color:#E7E9F2;border-radius:8px;padding:16px 18px;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-x:auto;margin:8px 0 0;white-space:pre-wrap}
 .codigo button{position:absolute;top:8px;right:8px;font:inherit;font-size:13px;font-weight:600;background:#fff;color:var(--tinta);border:0;border-radius:4px;padding:4px 10px;cursor:pointer}
@@ -322,6 +323,198 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
     const s = String(txt ?? '').trim();
     if (s.length <= max) return s;
     return s.slice(0, max - 3).trimEnd() + '...';
+  }
+
+  function proponerSchemaParaPagina({ url, html = '', title = '', description = '', brand = MARCA_NOMBRE }) {
+    let pathname = '/';
+    try {
+      pathname = new URL(url).pathname || '/';
+    } catch {
+      pathname = '/';
+    }
+
+    const cleanPath = pathname.toLowerCase();
+    const isHome = cleanPath === '/' || cleanPath === '';
+    const texto = `${cleanPath} ${title} ${description}`.toLowerCase();
+
+    const hasArticleTag = /<article\b/i.test(html);
+    const hasArticleMeta =
+      /<meta\b[^>]+(?:property=["']article:(?:published_time|modified_time|author)["']|name=["']author["'])/i.test(html);
+    const hasTimeTag = /<time\b[^>]*datetime=/i.test(html);
+    const looksLikeArticlePath =
+      /\/(blog|post|posts|articulo|articulos|noticia|noticias|guia|guias|journal|news)\/[^/]+/i.test(cleanPath);
+
+    const hasProductSignals =
+      /\/(producto|productos|product|products|tienda|shop|item)\//i.test(cleanPath) ||
+      (/itemprop=["']price["']|property=["']product:price:amount["']/i.test(html) && /\b(€|\$|eur|usd|comprar|añadir al carrito|add to cart)\b/i.test(texto));
+
+    const hasFaqSignals =
+      /\/(faq|faqs|preguntas-frecuentes|ayuda)\b/i.test(cleanPath) ||
+      (/\b(preguntas frecuentes|faq)\b/i.test(texto) && (html.match(/<summary\b/gi)?.length || 0) >= 2);
+
+    const hasAboutSignals = /\/(sobre-mi|sobre-nosotros|acerca-de|about|quienes-somos|equipo)\b/i.test(cleanPath);
+    const hasContactSignals = /\/(contacto|contact)\b/i.test(cleanPath);
+    const hasServiceSignals =
+      /\/(servicios|servicio|services|service|consultoria|auditoria|soluciones)\b/i.test(cleanPath) ||
+      /\b(servicios|consultoría|auditoría seo|presupuesto|solicitar información)\b/i.test(texto);
+
+    const pageName = title || url;
+    const base = {
+      '@context': 'https://schema.org',
+      url,
+      name: pageName,
+      ...(description ? { description } : {}),
+    };
+
+    if (isHome) {
+      return {
+        recommendedType: 'WebSite',
+        reason: 'Es la página principal del dominio (evita marcar la portada como Article).',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'WebSite',
+            publisher: { '@type': 'Organization', name: brand },
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    if (hasProductSignals) {
+      return {
+        recommendedType: 'Product',
+        reason: 'Se detectan señales de ficha de producto o comercio electrónico.',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'Product',
+            brand: { '@type': 'Brand', name: brand },
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    if (hasFaqSignals) {
+      return {
+        recommendedType: 'FAQPage',
+        reason: 'La ruta o el contenido corresponden a preguntas frecuentes.',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'FAQPage',
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    if (!isHome && (hasArticleTag || hasArticleMeta || hasTimeTag || looksLikeArticlePath)) {
+      return {
+        recommendedType: 'Article',
+        reason: 'Se detectan señales editoriales (ruta de artículo/blog, <article>, fecha o autor).',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'Article',
+            headline: pageName,
+            author: { '@type': 'Person', name: brand },
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    if (hasServiceSignals) {
+      return {
+        recommendedType: 'Service',
+        reason: 'Página orientada a servicios, consultoría o captación.',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'Service',
+            provider: { '@type': 'Organization', name: brand },
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    if (hasAboutSignals) {
+      return {
+        recommendedType: 'AboutPage',
+        reason: 'Página informativa de presentación o identidad del proyecto.',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'AboutPage',
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    if (hasContactSignals) {
+      return {
+        recommendedType: 'ContactPage',
+        reason: 'Página dedicada a contacto.',
+        jsonLd: JSON.stringify(
+          {
+            ...base,
+            '@type': 'ContactPage',
+          },
+          null,
+          2
+        ),
+      };
+    }
+
+    return {
+      recommendedType: 'WebPage',
+      reason: 'Página interior general sin señales claras de artículo, producto o FAQ.',
+      jsonLd: JSON.stringify(
+        {
+          ...base,
+          '@type': 'WebPage',
+        },
+        null,
+        2
+      ),
+    };
+  }
+
+  function resolverJsonLdSugerido(rawPatchJsonLd, proposal) {
+    let pathname = '/';
+    try {
+      pathname = new URL(proposal?.url || '').pathname || '/';
+    } catch {
+      pathname = '/';
+    }
+    const isHome = pathname === '/' || pathname === '';
+
+    try {
+      const parsed = JSON.parse(rawPatchJsonLd || '{}');
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        const currentType = String(parsed['@type'] || '');
+        const isArticleLike = /^(?:Article|BlogPosting|NewsArticle)$/i.test(currentType);
+
+        if ((isHome || proposal.recommendedType !== 'Article') && isArticleLike) {
+          return proposal.jsonLd;
+        }
+        return JSON.stringify(parsed, null, 2);
+      }
+    } catch {
+      // Si el backend no devolvió un JSON válido, usamos la propuesta generada
+    }
+
+    return proposal.jsonLd;
   }
 
   async function copiarTexto(texto, btn) {
@@ -1035,10 +1228,19 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
       .map(([k, v]) => `/* ${k} */\n${String(v)}`)
       .join('\n\n');
 
+    const targetUrl = r.url || ext.url || URL_HERRAMIENTA;
+    const schemaPropuesto = proponerSchemaParaPagina({
+      url: targetUrl,
+      html: String(r.html || ''),
+      title: r.title || ext.title || '',
+      description: r.meta_descripcion || ext.meta_descripcion || '',
+      brand: MARCA_NOMBRE,
+    });
+
     const patches = r.patches || {};
     const optTitle = String(patches.optimized_title || '');
     const optDesc = String(patches.optimized_description || '');
-    const jsonLd = String(patches.json_ld || '{}');
+    const jsonLd = resolverJsonLdSugerido(String(patches.json_ld || ''), schemaPropuesto);
 
     const htmlSnippet = `<title>${optTitle}</title>\n<meta name="description" content="${optDesc}">`;
     const schemaSnippet = `<script type="application/ld+json">\n${jsonLd}\n<` + `/script>`;
@@ -1049,7 +1251,6 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
       snippetsCopiables.push(fragmentosRaw);
     }
 
-    const targetUrl = r.url || ext.url || URL_HERRAMIENTA;
     const textoCompartir = `He revisado ${targetUrl} con Quick SEO Fixer (${pasadas}/${total} reglas SEO críticas superadas) · Herramienta de ${MARCA_NOMBRE}`;
     const urlCompartir = URL_HERRAMIENTA;
     const linkedinHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(urlCompartir)}`;
@@ -1103,7 +1304,7 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
             <li>
               <span class="ico ${Array.isArray(ext.schema_json_invalido) && ext.schema_json_invalido.length > 0 ? 'problema' : 'ok'}" aria-hidden="true">${Array.isArray(ext.schema_json_invalido) && ext.schema_json_invalido.length > 0 ? '✕' : '✓'}</span>
               <strong>Datos estructurados (Schema)</strong>
-              <span class="t">Tipos: ${esc(schemaTiposTexto)} · Formatos: ${esc(schemaFormatosTexto)} · JSON inválido: ${esc(schemaInvalidosTexto)}</span>
+              <span class="t">Detectados: ${esc(schemaTiposTexto)} · Propuesto: <strong>${esc(schemaPropuesto.recommendedType)}</strong> (${esc(schemaPropuesto.reason)}) · Formatos: ${esc(schemaFormatosTexto)} · JSON inválido: ${esc(schemaInvalidosTexto)}</span>
             </li>
             <li>
               <span class="ico ok" aria-hidden="true">i</span>
@@ -1167,6 +1368,7 @@ footer{border-top:1px solid var(--linea);padding:26px 0 40px;font-size:14.5px;co
 
           <div class="parche-item">
             <h4>Datos estructurados (Schema JSON-LD)</h4>
+            <p class="schema-sugerencia"><strong>Schema propuesto:</strong> <code>${esc(schemaPropuesto.recommendedType)}</code> — ${esc(schemaPropuesto.reason)}</p>
             <div class="codigo">
               <pre>${esc(schemaSnippet)}</pre>
               <button type="button" data-copy-index="1">Copiar</button>
