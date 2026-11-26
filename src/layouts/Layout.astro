@@ -1,19 +1,25 @@
 ---
-import "../styles/global.css"
+import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "src/components/Footer.astro";
 // Supports weights 100-900
 import '@fontsource-variable/onest';
 
 interface Props {
-	title: string
-	description: string
-
+	title: string;
+	description: string;
+	canonical?: string;
 }
 
-	const{description, title}=Astro.props
----
+const {
+	description,
+	title,
+	canonical,
+} = Astro.props;
 
+const canonicalUrl =
+	canonical ?? new URL(Astro.url.pathname, Astro.site ?? "https://www.beaanido.es").toString();
+---
 
 <!doctype html>
 <html lang="es">
@@ -22,6 +28,7 @@ interface Props {
 		<meta name="viewport" content="width=device-width" />
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={canonicalUrl} />
 		<title>{title}</title>
 	</head>
 	<body>
@@ -38,52 +45,32 @@ interface Props {
 			<slot />
 		</main>
 		<footer class="flex bg-violet-800">
-					<Footer />
+			<Footer />
 		</footer>
 	</body>
 </html>
 
 <style is:global>
-	
-	html{
-		
-	}
 	body {
 		min-height: 100%;
 		font-family: "Onest Variable";
 		line-height: 1.7;
-		
 	}
 	
 	.menu {
 		display: flex;
-		position:sticky;
+		position: sticky;
 		top: 0;
 		justify-content: center;
 		justify-items: center;
 		left: 0;
 		right: 0;
-		
-
 	}
 
 	.proyecto {
 		width: 100%;
 		font-family: "Onest Variable";
 		justify-content: center;
-		marging-right:50;
-		
-
+		margin-right: 50px;
 	}
-
-	
-
- 
-
-
-
-	
-	
-
-	
 </style>
